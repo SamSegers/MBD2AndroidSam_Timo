@@ -1,8 +1,10 @@
 package nl.samtimo.pubcrawl;
 
 import android.animation.Animator;
+
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -93,61 +95,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mRacesButton = (Button) findViewById(R.id.races_button);
+        //TODO: remove this button
+        Button simpleLoginButton = (Button) findViewById(R.id.simple_login_button);
+        simpleLoginButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenu();
+            }
+        });
+
+        /*Button mRacesButton = (Button) findViewById(R.id.races_button);
         mRacesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Request request = new Request(RequestMethod.GET, "races", null, null);
-                new RequestTask().execute(request);
+            Request request = new Request(RequestMethod.GET, "races", null, null);
+            System.out.println("test "+new RequestTask().execute(request));
             }
-        });
+        });*/
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-
-    /*private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }*/
-
-    /*private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mUsernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }*/
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }*/
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -190,7 +158,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             Request request = new Request(RequestMethod.POST, "login", "username="+username+"&password="+password, null);
-            new RequestTask().execute(request);
+            new RequestTask(this).execute(request);
             /*showProgress(true);
             mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);*/
@@ -241,18 +209,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+            // Retrieve data rows for the device user's 'profile' contact.
+            Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
+                    ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
+            // Select only email addresses.
+            ContactsContract.Contacts.Data.MIMETYPE +
+                    " = ?", new String[]{ContactsContract.CommonDataKinds.Email
+            .CONTENT_ITEM_TYPE},
 
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+            // Show primary email addresses first. Note that there won't be
+            // a primary email address if the user hasn't specified one.
+            ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
     @Override
@@ -284,12 +252,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private interface ProfileQuery {
         String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+            ContactsContract.CommonDataKinds.Email.ADDRESS,
+            ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
         };
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
+    }
+
+    public void openMenu(){
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
     }
 
     /**
