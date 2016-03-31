@@ -3,12 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context="nl.samtimo.pubcrawl.RacesActivity">
 
     <fragment
         android:id="@+id/fragment_races_list"
         android:name="nl.samtimo.pubcrawl.RacesListFragment"
         android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <fragment
+        android:id="@+id/fragment_races_detail"
+        android:name="nl.samtimo.pubcrawl.RacesDetailFragment"
+        android:layout_weight="2"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
 </LinearLayout>

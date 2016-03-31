@@ -24,9 +24,14 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     }
 
     private LoginActivity loginActivity;
+    private RacesActivity racesActivity;
 
     public RequestTask(LoginActivity loginActivity){
         this.loginActivity = loginActivity;
+    }
+
+    public RequestTask(RacesActivity racesActivity){
+        this.racesActivity = racesActivity;
     }
 
     protected String doInBackground(Request... requests) {
@@ -116,7 +121,10 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
 
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
-        if(loginActivity!=null && result!=null && result.equals("authorized"))
-            loginActivity.openMenu();
+        if(result!=null) {
+            if (loginActivity!=null && result.equals("authorized")) loginActivity.openMenu();
+            else if(racesActivity!=null) racesActivity.loadRaces(result);
+            else System.out.println(result);
+        }else System.out.println("result is empty");
     }
 }

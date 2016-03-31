@@ -8,28 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link RacesListFragment.OnFragmentInteractionListener} interface
+ * {@link RacesDetailFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class RacesListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class RacesDetailFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<Race> races;
-    private View rootView;
-    private RaceListAdapter adapter;
-
-    public RacesListFragment() {
-        races = new ArrayList<Race>();
-        races.add(new Race("Pelgrimageefesef", "race 0", null, null, null));
+    public RacesDetailFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -39,25 +31,15 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_races_list, container, false);
-
-        // get the ListView from fragment_list
-        ListView listView = (ListView) rootView.findViewById(R.id.list_races);
-        // register ListView so I can use it with the context menu
-        registerForContextMenu(listView);
-        // create adapter, parameters: activity, layout of individual items, array of values
-        adapter = new RaceListAdapter(getActivity(), races);
-        // set the adapter to the ListView
-        listView.setAdapter(adapter);
-        // add actionlistener
-        listView.setOnItemClickListener(this);
-
-        return rootView;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_races_detail, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) mListener.onListFragmentInteraction(uri);
+        if (mListener != null) {
+            mListener.onDetailFragmentInteraction(uri);
+        }
     }
 
     @Override
@@ -78,13 +60,7 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Race item = (Race)((ListView)parent).getItemAtPosition(position);
-        //TextView o = (TextView)view.findViewById(R.id.list_fruits);
-        //o.setBackgroundColor(0xFF00FF00);
-        //ListView listView = (ListView) rootView.findViewById(R.id.list_fruits);
-        /*listView.setItemChecked(position, true);
-        adapter.notifyDataSetChanged();*/
-        if(item!=null) mListener.onListFragmentInteraction(item);
+
     }
 
     /**
@@ -99,6 +75,6 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Object object);
+        void onDetailFragmentInteraction(Uri uri);
     }
 }

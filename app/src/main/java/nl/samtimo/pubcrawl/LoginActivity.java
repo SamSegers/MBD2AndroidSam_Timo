@@ -48,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         simpleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Request request = new Request(RequestMethod.POST, "login", "username=hitchhiker&password=password", null);
+                new RequestTask(LoginActivity.this).execute(request);
                 openMenu();
             }
         });
