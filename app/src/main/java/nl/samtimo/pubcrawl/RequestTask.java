@@ -116,7 +116,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
 
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
-        if(loginActivity!=null && result.equals("authorized"))
+        if(loginActivity!=null && result!=null && result.equals("authorized"))
             loginActivity.openMenu();
     }
 }
