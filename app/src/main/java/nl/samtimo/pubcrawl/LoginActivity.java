@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mUserSignInButton = (Button) findViewById(R.id.user_sign_in_button);
+        Button mUserSignInButton = (Button) findViewById(R.id.sign_in_button);
         mUserSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,14 +50,20 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Request request = new Request(RequestMethod.POST, "login", "username=hitchhiker&password=password", null);
                 new RequestTask(LoginActivity.this).execute(request);
-                openMenu();
+            }
+        });
+
+        Button mUserSignUpButton = (Button) findViewById(R.id.sign_up_button);
+        mUserSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }
 
     private void attemptLogin() {
-        //if (mAuthTask != null) return;
-
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
