@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
@@ -29,12 +32,28 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
 
     public RacesListFragment() {
         races = new ArrayList<Race>();
-        races.add(new Race("Pelgrimageefesef", "race 0", null, null, null));
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Request request = new Request(RequestMethod.GET, "races", null, null);
+        new RequestTask(this).execute(request);
+    }
+
+    public void loadRaces(String json){
+        try{
+            JSONArray racesArr = new JSONArray(json);
+            for (int i=0; i<racesArr.length(); i++) {
+                JSONObject race = racesArr.getJSONObject(i);
+                System.out.println("race "+race.getString("name"));
+                races.add(new Race(race.getString("_id"), race.getString("name"), null, null, null));
+            }
+            System.out.println(races.toString());
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override

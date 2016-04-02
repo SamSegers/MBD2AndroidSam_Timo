@@ -15,18 +15,6 @@ public class RacesActivity extends FragmentActivity implements RacesListFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_races);
-
-        Request request = new Request(RequestMethod.GET, "races", null, null);
-        new RequestTask(this).execute(request);
-    }
-
-    public void loadRaces(String json){
-        try{
-            JSONArray races = new JSONArray(json);
-            System.out.println(json);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
     }
 
     @Override

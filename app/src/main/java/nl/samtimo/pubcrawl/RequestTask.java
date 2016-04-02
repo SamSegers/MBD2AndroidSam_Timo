@@ -24,14 +24,14 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     }
 
     private LoginActivity loginActivity;
-    private RacesActivity racesActivity;
+    private RacesListFragment racesListFragment;
 
     public RequestTask(LoginActivity loginActivity){
         this.loginActivity = loginActivity;
     }
 
-    public RequestTask(RacesActivity racesActivity){
-        this.racesActivity = racesActivity;
+    public RequestTask(RacesListFragment racesListFragment){
+        this.racesListFragment = racesListFragment;
     }
 
     protected String doInBackground(Request... requests) {
@@ -123,7 +123,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     protected void onPostExecute(String result) {
         if(result!=null) {
             if (loginActivity!=null && result.equals("authorized")) loginActivity.openMenu();
-            else if(racesActivity!=null) racesActivity.loadRaces(result);
+            else if(racesListFragment!=null) racesListFragment.loadRaces(result);
             else System.out.println(result);
         }else System.out.println("result is empty");
     }
