@@ -26,6 +26,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     private LoginActivity loginActivity;
     private SignUpActivity signUpActivity;
     private RacesListFragment racesListFragment;
+    private PubsListFragment pubsListFragment;
 
     public RequestTask(LoginActivity loginActivity){
         this.loginActivity = loginActivity;
@@ -37,6 +38,10 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
 
     public RequestTask(RacesListFragment racesListFragment){
         this.racesListFragment = racesListFragment;
+    }
+
+    public RequestTask(PubsListFragment pubsListFragment){
+        this.pubsListFragment = pubsListFragment;
     }
 
     protected String doInBackground(Request... requests) {
@@ -128,8 +133,9 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     protected void onPostExecute(String result) {
         if(result!=null) {
             if (loginActivity!=null && result.equals("authorized")) loginActivity.openMenu();
-            if (signUpActivity!=null && result.equals("signed up")) signUpActivity.openMenu();
+            else if (signUpActivity!=null && result.equals("signed up")) signUpActivity.openMenu();
             else if(racesListFragment!=null) racesListFragment.loadRaces(result);
+            else if(pubsListFragment!=null) pubsListFragment.addPubs(result);
             else System.out.println(result);
         }else System.out.println("result is empty");
     }

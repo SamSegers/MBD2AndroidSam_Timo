@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragment_pubs_search"
-        android:name="nl.samtimo.pubcrawl.PubsSearchFragment"
+        android:name="nl.samtimo.pubcrawl.PubsListFragment"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
