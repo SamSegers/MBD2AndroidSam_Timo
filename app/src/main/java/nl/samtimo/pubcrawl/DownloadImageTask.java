@@ -11,6 +11,8 @@ import java.io.InputStream;
 /**
  * Created by admin on 03-04-16.
  */
+
+//TODO: might remove this class, see: http://stackoverflow.com/questions/3118691/android-make-an-image-at-a-url-equal-to-imageviews-image
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     private ImageView bmImage;
 

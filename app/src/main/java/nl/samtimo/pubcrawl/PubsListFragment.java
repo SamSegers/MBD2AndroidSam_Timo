@@ -77,13 +77,6 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onSearchFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -102,11 +95,13 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Pub pub = (Pub)((ListView)parent).getItemAtPosition(position);
+        mListener.onListFragmentInteraction(pub);
+        getActivity().findViewById(R.id.add_pub_button).setVisibility(View.VISIBLE);
     }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onSearchFragmentInteraction(Uri uri);
+        void onListFragmentInteraction(Pub pub);
     }
 }

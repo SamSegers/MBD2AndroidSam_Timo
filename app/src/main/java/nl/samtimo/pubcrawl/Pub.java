@@ -26,6 +26,10 @@ public class Pub {
         System.out.println(name);
     }
 
+    public String getid(){
+        return id;
+    }
+
     public String getName(){
         return name;
     }
