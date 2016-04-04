@@ -28,6 +28,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     private RacesListFragment racesListFragment;
     private PubsListFragment pubsListFragment;
     private PubsDetailFragment pubsDetailFragment;
+    private MyRacesListFragment myRacesListFragment;
 
     public RequestTask(LoginActivity loginActivity){
         this.loginActivity = loginActivity;
@@ -47,6 +48,10 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
 
     public RequestTask(PubsDetailFragment pubsDetailFragment){
         this.pubsDetailFragment = pubsDetailFragment;
+    }
+
+    public RequestTask(MyRacesListFragment myRacesListFragment){
+        this.myRacesListFragment = myRacesListFragment;
     }
 
     protected String doInBackground(Request... requests) {
@@ -140,8 +145,9 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
             if (loginActivity!=null && result.equals("authorized")) loginActivity.openMenu();
             else if (signUpActivity!=null && result.equals("signed up")) signUpActivity.openMenu();
             else if(racesListFragment!=null) racesListFragment.loadRaces(result);
-            else if(pubsListFragment!=null) pubsListFragment.addPubs(result);
-            else if(pubsDetailFragment!=null) System.out.println(result);//pubsDetailFragment.addPub(result);
+            else if(pubsListFragment!=null) pubsListFragment.loadPubs(result);
+            else if(pubsDetailFragment!=null) pubsDetailFragment.addPubCont(result);
+            else if(myRacesListFragment!=null) myRacesListFragment.loadPubs(result);
             else System.out.println(result);
         }else System.out.println("result is empty");
     }

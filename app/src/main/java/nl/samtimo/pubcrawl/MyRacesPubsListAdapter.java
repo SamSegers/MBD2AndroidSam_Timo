@@ -13,13 +13,13 @@ import java.util.ArrayList;
 /**
  * Created by admin on 31-03-16.
  */
-public class PubListAdapter extends ArrayAdapter<Pub> {
+public class MyRacesPubsListAdapter extends ArrayAdapter<Pub> {
 
     private final Activity context;
     private final ArrayList<Pub> items;
 
-    public PubListAdapter(Activity context, ArrayList<Pub> items) {
-        super(context, R.layout.list_item_pub, items);
+    public MyRacesPubsListAdapter(Activity context, ArrayList<Pub> items) {
+        super(context, R.layout.list_item_pub_selectable, items);
 
         this.context = context;
         this.items = items;
@@ -27,13 +27,13 @@ public class PubListAdapter extends ArrayAdapter<Pub> {
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.list_item_pub, null, true);
+        View rowView = inflater.inflate(R.layout.list_item_pub_selectable, null, true);
 
         TextView txtLabel = (TextView) rowView.findViewById(R.id.item_label);
         txtLabel.setText(items.get(position).getName());
 
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.item_icon);
-        items.get(position).initImage(imageView);
+        /*ImageView imageView = (ImageView) rowView.findViewById(R.id.item_icon);
+        items.get(position).initImage(imageView);*/
 
         return rowView;
     };

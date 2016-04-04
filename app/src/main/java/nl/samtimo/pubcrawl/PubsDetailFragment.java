@@ -73,6 +73,7 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
         new RequestTask(PubsDetailFragment.this).execute(request);
     }
 
+    //TODO
     public void addPubCont(String json){
         System.out.println("pubs detail fragment");
     }

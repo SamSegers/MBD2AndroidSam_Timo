@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.samtimo.pubcrawl.PubsListFragment">
+    tools:context="nl.samtimo.pubcrawl.MyRacesListFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <ListView
-        android:id="@+id/list_pubs"
+        android:id="@+id/list_my_races"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"/>
+        android:layout_height="match_parent"/>
 </FrameLayout>
