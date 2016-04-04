@@ -7,6 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 
 /**
@@ -19,21 +25,72 @@ public class MyRacesDetailFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private Race selectedRace;
+
     public MyRacesDetailFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_races_detail, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) mListener.onDetailFragmentInteraction(uri);
+    public void updateDetails(Race race){
+        selectedRace = race;
+        TextView textHeader = (TextView)getActivity().findViewById(R.id.text_header);
+        textHeader.setText(race.getName());
+        EditText editName = (EditText)getActivity().findViewById(R.id.edit_name);
+        editName.setText(race.getName());
+
+        MyRacesPubsListFragment myRacesPubsListFragment = (MyRacesPubsListFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_pub_list);
+        myRacesPubsListFragment.testChecked();
+    }
+
+    public void saveRace(){
+        EditText editName = (EditText)getActivity().findViewById(R.id.edit_name);
+        String requestRoute = "races/"+selectedRace.getId()+"/update";
+
+        String requestBody = "{ \"name\": "+editName.getText()+", \"pubs\": [";
+        ArrayList<Pub> waypoints = selectedRace.getWaypoints();
+        boolean first = true;
+        for(int i=0;i<waypoints.size();i++){
+            if(first==false) requestBody += ",";
+            requestBody += "{ \"id\": \""+waypoints.get(i).getId()+"\", \"name\": \""+waypoints.get(i).getName()+"\"}";
+            first=false;
+        }
+        requestBody += "]}";
+
+        System.out.println(requestBody);
+        Request request = new Request(RequestMethod.PUT, requestRoute, requestBody, null);
+        new RequestTask(this).execute(request);
+        System.out.println("save race");
+    }
+
+    //TODO avoid changing the name when the request failed
+    public void saveRaceFinish(){
+        TextView textHeader = (TextView)getActivity().findViewById(R.id.text_header);
+        EditText editName = (EditText)getActivity().findViewById(R.id.edit_name);
+        selectedRace.setName(editName.getText().toString());
+        textHeader.setText(selectedRace.getName());
+
+        MyRacesListFragment myRacesListFragment = (MyRacesListFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_list);
+        myRacesListFragment.setSeletectRaceName(selectedRace.getName());
+    }
+
+    //TODO
+    public void startRace(){
+        System.out.println("start race");
+    }
+
+    public void updatePub(Pub pub, boolean inRace){
+        if(selectedRace!=null) selectedRace.setWaypoint(pub, inRace);
+    }
+
+    public ArrayList<Pub> getWaypoints(){
+        return selectedRace!=null?selectedRace.getWaypoints():null;
     }
 
     @Override

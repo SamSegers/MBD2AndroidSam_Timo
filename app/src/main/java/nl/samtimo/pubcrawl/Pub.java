@@ -26,7 +26,7 @@ public class Pub {
         System.out.println(name);
     }
 
-    public String getid(){
+    public String getId(){
         return id;
     }
 

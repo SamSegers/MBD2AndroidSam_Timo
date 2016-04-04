@@ -7,16 +7,23 @@
     tools:context="nl.samtimo.pubcrawl.RacesActivity">
 
     <fragment
-        android:id="@+id/fragment_races_list"
+        android:id="@+id/fragment_my_races_list"
         android:name="nl.samtimo.pubcrawl.MyRacesListFragment"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
 
     <fragment
-        android:id="@+id/fragment_races_detail"
+        android:id="@+id/fragment_my_races_detail"
         android:name="nl.samtimo.pubcrawl.MyRacesDetailFragment"
         android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <fragment
+        android:id="@+id/fragment_my_races_pub_list"
+        android:name="nl.samtimo.pubcrawl.MyRacesPubsListFragment"
+        android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
 </LinearLayout>

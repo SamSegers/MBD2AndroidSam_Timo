@@ -23,12 +23,16 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
         cookieManager = new CookieManager();
     }
 
+    private String callback;
+
     private LoginActivity loginActivity;
     private SignUpActivity signUpActivity;
     private RacesListFragment racesListFragment;
     private PubsListFragment pubsListFragment;
     private PubsDetailFragment pubsDetailFragment;
+    private MyRacesPubsListFragment myRacesPubsListFragment;
     private MyRacesListFragment myRacesListFragment;
+    private MyRacesDetailFragment myRacesDetailFragment;
 
     public RequestTask(LoginActivity loginActivity){
         this.loginActivity = loginActivity;
@@ -50,8 +54,21 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
         this.pubsDetailFragment = pubsDetailFragment;
     }
 
+    public RequestTask(MyRacesPubsListFragment myRacesPubsListFragment){
+        this.myRacesPubsListFragment = myRacesPubsListFragment;
+    }
+
     public RequestTask(MyRacesListFragment myRacesListFragment){
         this.myRacesListFragment = myRacesListFragment;
+    }
+
+    public RequestTask(MyRacesListFragment myRacesListFragment, String callback){
+        this.myRacesListFragment = myRacesListFragment;
+        this.callback = callback;
+    }
+
+    public RequestTask(MyRacesDetailFragment myRacesDetailFragment){
+        this.myRacesDetailFragment = myRacesDetailFragment;
     }
 
     protected String doInBackground(Request... requests) {
@@ -65,7 +82,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(request.getMethod().name());
 
-            if(request.getMethod()==RequestMethod.POST){
+            if(request.getMethod()==RequestMethod.POST || request.getMethod()==RequestMethod.PUT){
                 connection.setDoOutput(true);
                 connection.setUseCaches(false);
             }
@@ -76,7 +93,8 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                 byte[] postData = request.getParameters().getBytes(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT ? StandardCharsets.UTF_8 : Charset.forName("UTF-8"));
                 connection.setRequestProperty("Content-Length", Integer.toString(postData.length));
                 connection.setUseCaches(false);
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                if(request.getMethod()==RequestMethod.PUT) connection.setRequestProperty("Content-Type", "application/json");
+                else connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 connection.setRequestProperty("charset", "utf-8");
                 try{
                     DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
@@ -147,7 +165,12 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
             else if(racesListFragment!=null) racesListFragment.loadRaces(result);
             else if(pubsListFragment!=null) pubsListFragment.loadPubs(result);
             else if(pubsDetailFragment!=null) pubsDetailFragment.addPubCont(result);
-            else if(myRacesListFragment!=null) myRacesListFragment.loadPubs(result);
+            else if(myRacesPubsListFragment !=null) myRacesPubsListFragment.loadPubs(result);
+            else if(myRacesListFragment!=null){
+                if(callback!=null && callback=="add") myRacesListFragment.addRaceFinish(result);
+                else myRacesListFragment.loadRaces(result);
+            }
+            else if(myRacesDetailFragment!=null) myRacesDetailFragment.saveRaceFinish();
             else System.out.println(result);
         }else System.out.println("result is empty");
     }

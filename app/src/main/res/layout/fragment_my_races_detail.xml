@@ -4,10 +4,40 @@
     android:layout_height="match_parent"
     tools:context="nl.samtimo.pubcrawl.MyRacesDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/text_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="@string/fragment_my_races_detail_placeholder" />
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_below="@+id/text_header"
+            android:hint="name"/>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_above="@+id/button_start_now"
+            android:text="Save race"/>
+
+        <Button
+            android:id="@+id/button_start_now"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:text="Start now"/>
+    </RelativeLayout>
 </FrameLayout>

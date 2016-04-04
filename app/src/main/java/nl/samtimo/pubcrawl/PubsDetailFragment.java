@@ -69,7 +69,7 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     public void addPub(){
-        Request request = new Request(RequestMethod.PUT, "users/pubs/"+seletedPub.getid(), null, null);
+        Request request = new Request(RequestMethod.PUT, "users/pubs/"+seletedPub.getId()+"/name/"+seletedPub.getName().replaceAll(" ", "_"), null, null);
         new RequestTask(PubsDetailFragment.this).execute(request);
     }
 

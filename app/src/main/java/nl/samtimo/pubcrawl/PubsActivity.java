@@ -23,8 +23,8 @@ public class PubsActivity extends FragmentActivity implements PubsListFragment.O
         addPubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PubsDetailFragment detailFragment = (PubsDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_pubs_detail);
-                detailFragment.addPub();
+            PubsDetailFragment detailFragment = (PubsDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_pubs_detail);
+            detailFragment.addPub();
             }
         });
     }

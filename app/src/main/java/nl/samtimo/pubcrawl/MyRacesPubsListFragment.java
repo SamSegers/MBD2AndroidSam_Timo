@@ -1,7 +1,6 @@
 package nl.samtimo.pubcrawl;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,98 +8,59 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MyRacesListFragment.OnFragmentInteractionListener} interface
+ * {@link MyRacesPubsListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class MyRacesListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class MyRacesPubsListFragment extends Fragment  implements AdapterView.OnItemClickListener{
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<Race> races;
+    private ArrayList<Pub> pubs;
     private View rootView;
-    private RaceListAdapter adapter;
-    private String newName;
-    private Race selectedRace;
+    private MyRacesPubsListAdapter adapter;
 
-    public MyRacesListFragment() {
-        races = new ArrayList<>();
+    public MyRacesPubsListFragment() {
+        pubs = new ArrayList<>();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Request request = new Request(RequestMethod.GET, "users/racescreated", null, null);
+        Request request = new Request(RequestMethod.GET, "users/pubs", null, null);
         new RequestTask(this).execute(request);
-    }
-
-    public void loadRaces(String json){
-        races.clear();
-        try{
-            JSONArray racesArr = new JSONArray(json);
-            for (int i=0; i<racesArr.length(); i++) {
-                JSONObject race = racesArr.getJSONObject(i);
-                ArrayList<Pub> waypoints= new ArrayList<>();
-                if(race.has("pubs")){
-                    JSONArray waypointsArr = race.getJSONArray("pubs");
-                    for(int j=0;j<waypointsArr.length();j++){
-                        JSONObject waypoint = waypointsArr.getJSONObject(j);
-                        if(waypoint.has("id") && waypoint.has("name")) waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));
-                    }
-                }
-                races.add(new Race(race.getString("_id"), race.getString("name"), waypoints, null, null));
-            }
-            adapter.notifyDataSetChanged();
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-    }
-
-    public void addRace(){
-        newName = String.valueOf(System.currentTimeMillis() / 1000);
-        Request request = new Request(RequestMethod.POST, "races/new/"+newName, null, null);
-        new RequestTask(this, "add").execute(request);
-    }
-
-    public void addRaceFinish(String result){
-        System.out.println(result);
-        adapter.add(new Race("id", newName, null, null, null));
-    }
-
-    public void setSeletectRaceName(String name){
-        selectedRace.setName(name);
-        adapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_my_races_list, container, false);
-
+        rootView = inflater.inflate(R.layout.fragment_my_races_pubs_list, container, false);
         // get the ListView from fragment_list
-        ListView listView = (ListView) rootView.findViewById(R.id.list_races);
+        ListView listView = (ListView) rootView.findViewById(R.id.list_my_races);
         // register ListView so I can use it with the context menu
         registerForContextMenu(listView);
         // create adapter, parameters: activity, layout of individual items, array of values
-        adapter = new RaceListAdapter(getActivity(), races);
+        adapter = new MyRacesPubsListAdapter(getActivity(), pubs);
         // set the adapter to the ListView
         listView.setAdapter(adapter);
         // add actionlistener
         listView.setOnItemClickListener(this);
 
         return rootView;
+    }
+
+    public void testChecked(){
+        adapter.testChecked();
     }
 
     @Override
@@ -119,10 +79,24 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
         mListener = null;
     }
 
+    public void loadPubs(String result){
+        System.out.println(result);
+        try{
+            JSONObject pubsObj = new JSONObject(result);
+            JSONArray pubsArr = pubsObj.getJSONArray("pub");
+            for (int i=0; i<pubsArr.length(); i++) {
+                JSONObject pub = pubsArr.getJSONObject(i);
+                if(pub.has("id") && pub.has("name")) pubs.add(new Pub(pub.getString("id"), pub.getString("name"), null));
+            }
+            adapter.notifyDataSetChanged();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        selectedRace = (Race) parent.getItemAtPosition(position);
-        if(selectedRace!=null) mListener.onListFragmentInteraction(selectedRace);
+
     }
 
     /**
@@ -137,6 +111,6 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Race race);
+        void onPubListFragmentInteraction(Uri uri);
     }
 }

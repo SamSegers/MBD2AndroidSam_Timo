@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <CheckBox
-        android:id="@+id/item_icon"
+        android:id="@+id/item_checkbox"
         android:scaleX="1.8"
         android:scaleY="1.8"
         android:layout_marginLeft="10dp"
@@ -18,8 +18,8 @@
         android:id="@+id/item_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@+id/label"
         android:padding="15dp"
         android:textSize="25sp"/>
+    <!--android:text="@+id/label"-->
         <!--android:layout_toRightOf="@+id/item_icon" />-->
 </LinearLayout>
