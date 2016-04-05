@@ -37,7 +37,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/button_remove"
             android:text="Start now"/>
+
+        <Button
+            android:id="@+id/button_remove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:text="Delete race"/>
     </RelativeLayout>
 </FrameLayout>

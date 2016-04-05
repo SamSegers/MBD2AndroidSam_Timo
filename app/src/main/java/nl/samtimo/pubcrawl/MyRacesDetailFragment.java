@@ -50,23 +50,26 @@ public class MyRacesDetailFragment extends Fragment {
     }
 
     public void saveRace(){
+        System.out.println(selectedRace.getId());
         EditText editName = (EditText)getActivity().findViewById(R.id.edit_name);
         String requestRoute = "races/"+selectedRace.getId()+"/update";
 
-        String requestBody = "{ \"name\": "+editName.getText()+", \"pubs\": [";
+        //TODO find something better for this
+        String requestBody = "{ \"name\": \""+editName.getText()+"\", \"pubs\": [";
         ArrayList<Pub> waypoints = selectedRace.getWaypoints();
-        boolean first = true;
-        for(int i=0;i<waypoints.size();i++){
-            if(first==false) requestBody += ",";
-            requestBody += "{ \"id\": \""+waypoints.get(i).getId()+"\", \"name\": \""+waypoints.get(i).getName()+"\"}";
-            first=false;
+        if(waypoints!=null) {
+            boolean first = true;
+            for (int i = 0; i < waypoints.size(); i++) {
+                if (first == false) requestBody += ",";
+                requestBody += "{ \"id\": \"" + waypoints.get(i).getId() + "\", \"name\": \"" + waypoints.get(i).getName() + "\"}";
+                first = false;
+            }
         }
         requestBody += "]}";
 
         System.out.println(requestBody);
         Request request = new Request(RequestMethod.PUT, requestRoute, requestBody, null);
         new RequestTask(this).execute(request);
-        System.out.println("save race");
     }
 
     //TODO avoid changing the name when the request failed
@@ -83,6 +86,17 @@ public class MyRacesDetailFragment extends Fragment {
     //TODO
     public void startRace(){
         System.out.println("start race");
+    }
+
+    //TODO think wheter I should use 'remove' or 'delete'
+    public void removeRace(){
+        Request request = new Request(RequestMethod.DELETE, "races/"+selectedRace.getId(), null, null);
+        new RequestTask(this, "remove").execute(request);
+    }
+
+    public void removeRaceFinish(){
+        MyRacesListFragment myRacesListFragment = (MyRacesListFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_list);
+        myRacesListFragment.reloadRaces();
     }
 
     public void updatePub(Pub pub, boolean inRace){

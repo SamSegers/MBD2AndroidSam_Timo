@@ -39,6 +39,15 @@ public class MyRacesActivity extends FragmentActivity implements MyRacesListFrag
                 detailFragment.startRace();
             }
         });
+
+        Button btnRemoveRace = (Button) findViewById(R.id.button_remove);
+        btnRemoveRace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyRacesDetailFragment detailFragment = (MyRacesDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
+                detailFragment.removeRace();
+            }
+        });
     }
 
     @Override

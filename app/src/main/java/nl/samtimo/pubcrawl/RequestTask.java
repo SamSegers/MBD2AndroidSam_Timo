@@ -23,6 +23,8 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
         cookieManager = new CookieManager();
     }
 
+    //TODO code review
+
     private String callback;
 
     private LoginActivity loginActivity;
@@ -69,6 +71,11 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
 
     public RequestTask(MyRacesDetailFragment myRacesDetailFragment){
         this.myRacesDetailFragment = myRacesDetailFragment;
+    }
+
+    public RequestTask(MyRacesDetailFragment myRacesDetailFragment, String callback){
+        this.myRacesDetailFragment = myRacesDetailFragment;
+        this.callback = callback;
     }
 
     protected String doInBackground(Request... requests) {
@@ -170,7 +177,10 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                 if(callback!=null && callback=="add") myRacesListFragment.addRaceFinish(result);
                 else myRacesListFragment.loadRaces(result);
             }
-            else if(myRacesDetailFragment!=null) myRacesDetailFragment.saveRaceFinish();
+            else if(myRacesDetailFragment!=null){
+                if(callback!=null && callback=="remove") myRacesDetailFragment.removeRaceFinish();
+                else myRacesDetailFragment.saveRaceFinish();
+            }
             else System.out.println(result);
         }else System.out.println("result is empty");
     }

@@ -43,6 +43,10 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        reloadRaces();
+    }
+
+    public void reloadRaces(){
         Request request = new Request(RequestMethod.GET, "users/racescreated", null, null);
         new RequestTask(this).execute(request);
     }
@@ -53,12 +57,14 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
             JSONArray racesArr = new JSONArray(json);
             for (int i=0; i<racesArr.length(); i++) {
                 JSONObject race = racesArr.getJSONObject(i);
-                ArrayList<Pub> waypoints= new ArrayList<>();
+                ArrayList<Pub> waypoints = new ArrayList<>();
                 if(race.has("pubs")){
                     JSONArray waypointsArr = race.getJSONArray("pubs");
                     for(int j=0;j<waypointsArr.length();j++){
-                        JSONObject waypoint = waypointsArr.getJSONObject(j);
-                        if(waypoint.has("id") && waypoint.has("name")) waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));
+                        System.out.println("race");
+                        JSONObject waypoint = waypointsArr.optJSONObject(j);
+                        if(waypoint!=null && waypoint.has("id") && waypoint.has("name"))
+                            waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));
                     }
                 }
                 races.add(new Race(race.getString("_id"), race.getString("name"), waypoints, null, null));
@@ -76,8 +82,12 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
     }
 
     public void addRaceFinish(String result){
-        System.out.println(result);
-        adapter.add(new Race("id", newName, null, null, null));
+        try{
+            JSONObject object = new JSONObject(result);
+            adapter.add(new Race(object.getString("_id"), newName, null, null, null));
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public void setSeletectRaceName(String name){
