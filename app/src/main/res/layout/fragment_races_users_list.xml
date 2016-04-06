@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyRacesPubsListFragment">
+    tools:context="nl.samtimo.pubcrawl.RacesUsersListFragment">
 
     <ListView
-        android:id="@+id/list_my_races"
+        android:id="@+id/list_races_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </FrameLayout>

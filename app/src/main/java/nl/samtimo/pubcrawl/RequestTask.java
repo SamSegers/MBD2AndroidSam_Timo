@@ -35,6 +35,8 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     private MyRacesPubsListFragment myRacesPubsListFragment;
     private MyRacesListFragment myRacesListFragment;
     private MyRacesDetailFragment myRacesDetailFragment;
+    private RacesUsersListFragment racesUsersListFragment;
+    private RacesDetailFragment racesDetailFragment;
 
     public RequestTask(LoginActivity loginActivity){
         this.loginActivity = loginActivity;
@@ -76,6 +78,14 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     public RequestTask(MyRacesDetailFragment myRacesDetailFragment, String callback){
         this.myRacesDetailFragment = myRacesDetailFragment;
         this.callback = callback;
+    }
+
+    public RequestTask(RacesUsersListFragment racesUsersListFragment){
+        this.racesUsersListFragment = racesUsersListFragment;
+    }
+
+    public RequestTask(RacesDetailFragment racesDetailFragment){
+        this.racesDetailFragment = racesDetailFragment;
     }
 
     protected String doInBackground(Request... requests) {
@@ -167,7 +177,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
         if(result!=null) {
-            if (loginActivity!=null && result.equals("authorized")) loginActivity.openMenu();
+            if (loginActivity!=null) loginActivity.login(result);
             else if (signUpActivity!=null && result.equals("signed up")) signUpActivity.openMenu();
             else if(racesListFragment!=null) racesListFragment.loadRaces(result);
             else if(pubsListFragment!=null) pubsListFragment.loadPubs(result);
@@ -181,6 +191,8 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                 if(callback!=null && callback=="remove") myRacesDetailFragment.removeRaceFinish();
                 else myRacesDetailFragment.saveRaceFinish();
             }
+            else if(racesUsersListFragment!=null) racesUsersListFragment.loadUsersFinish(result);
+            else if(racesDetailFragment!=null) racesDetailFragment.joinRaceFinish();
             else System.out.println(result);
         }else System.out.println("result is empty");
     }

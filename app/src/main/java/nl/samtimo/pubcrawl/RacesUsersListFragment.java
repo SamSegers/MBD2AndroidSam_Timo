@@ -19,55 +19,65 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link RacesListFragment.OnFragmentInteractionListener} interface
+ * {@link RacesUsersListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class RacesListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class RacesUsersListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<Race> races;
+    private ArrayList<User> users;
     private View rootView;
-    private RaceListAdapter adapter;
+    private UserListAdapter adapter;
 
-    public RacesListFragment() {
-        races = new ArrayList<>();
+    public RacesUsersListFragment() {
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Request request = new Request(RequestMethod.GET, "races", null, null);
+    public void loadUsers(Race race){
+        Request request = new Request(RequestMethod.GET, "races/"+race.getId()+"/users", null, null);
         new RequestTask(this).execute(request);
     }
 
-    public void loadRaces(String json){
+    public void loadUsersFinish(String result){
+        users.clear();
         try{
-            JSONArray racesArr = new JSONArray(json);
-            for (int i=0; i<racesArr.length(); i++) {
-                JSONObject race = racesArr.getJSONObject(i);
-                races.add(new Race(race.getString("_id"), race.getString("name"), null, null, null));
+            JSONArray usersArr = new JSONArray(result);
+            for (int i=0; i<usersArr.length(); i++) {
+                JSONObject user = usersArr.getJSONObject(i);
+                users.add(new User(user.getString("_id"), user.getString("username")));
             }
             adapter.notifyDataSetChanged();
+
+            RacesDetailFragment racesDetailFragment = (RacesDetailFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_races_detail);
+            racesDetailFragment.updateJoinButton();
         }catch(Exception ex){
             ex.printStackTrace();
         }
     }
 
+    //TODO uses contains()
+    public boolean contains(User user){
+        for(int i=0;i<users.size();i++){
+            //System.out.println(users.get(i).getId().equals(user.getId()));
+            if(users.get(i).getId().equals(user.getId())) return true;
+        }
+        return false;
+        //return users.contains(user);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_races_list, container, false);
-
-        // get the ListView from fragment_list
-        ListView listView = (ListView) rootView.findViewById(R.id.list_races);
-        // register ListView so I can use it with the context menu
+        rootView = inflater.inflate(R.layout.fragment_races_users_list, container, false);
+        ListView listView = (ListView) rootView.findViewById(R.id.list_races_users);
         registerForContextMenu(listView);
-        // create adapter, parameters: activity, layout of individual items, array of values
-        adapter = new RaceListAdapter(getActivity(), races);
-        // set the adapter to the ListView
+        users = new ArrayList<>();
+        adapter = new UserListAdapter(getActivity(), users);
         listView.setAdapter(adapter);
-        // add actionlistener
         listView.setOnItemClickListener(this);
 
         return rootView;
@@ -91,13 +101,7 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Race item = (Race)((ListView)parent).getItemAtPosition(position);
-        //TextView o = (TextView)view.findViewById(R.id.list_fruits);
-        //o.setBackgroundColor(0xFF00FF00);
-        //ListView listView = (ListView) rootView.findViewById(R.id.list_fruits);
-        /*listView.setItemChecked(position, true);
-        adapter.notifyDataSetChanged();*/
-        if(item!=null) mListener.onListFragmentInteraction(item);
+
     }
 
     /**
@@ -105,13 +109,13 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Race race);
+        void onFragmentInteraction(Uri uri);
     }
 }

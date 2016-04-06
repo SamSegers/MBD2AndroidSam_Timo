@@ -40,13 +40,6 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
         return inflater.inflate(R.layout.fragment_pubs_detail, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onDetailFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -82,6 +75,8 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
         seletedPub = pub;
         TextView textView = (TextView)getActivity().findViewById(R.id.text_detail);
         textView.setText(pub.getName().toLowerCase());
+
+        getActivity().findViewById(R.id.add_pub_button).setVisibility(View.VISIBLE);
     }
 
     public interface OnFragmentInteractionListener {

@@ -97,7 +97,6 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Pub pub = (Pub) parent.getItemAtPosition(position);
         mListener.onListFragmentInteraction(pub);
-        getActivity().findViewById(R.id.add_pub_button).setVisibility(View.VISIBLE);
     }
 
     public interface OnFragmentInteractionListener {

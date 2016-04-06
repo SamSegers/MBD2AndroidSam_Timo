@@ -15,6 +15,7 @@ public class Race {
     private String id;
     private String name;
     private ArrayList<Pub> waypoints;
+    private ArrayList<User> users;
     private Date startDate;
     private Date endDate;
     private Bitmap image;
@@ -24,6 +25,7 @@ public class Race {
         this.id = id;
         this.name = name;
         this.waypoints = waypoints!=null?waypoints:new ArrayList<Pub>();
+        this.users = users!=null?users:new ArrayList<User>();
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -57,5 +59,9 @@ public class Race {
 
     public ArrayList<Pub> getWaypoints(){
         return waypoints;
+    }
+
+    public ArrayList<User> getUsers(){
+        return users;
     }
 }

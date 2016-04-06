@@ -23,7 +23,9 @@
         <activity
             android:name=".PubsActivity"
             android:label="@string/title_activity_pubs" />
-        <activity android:name=".LoginActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -11,10 +11,14 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
     // UI references.
     private TextInputEditText mUsernameView;
     private TextInputEditText mPasswordView;
+
+    public static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +80,11 @@ public class LoginActivity extends AppCompatActivity {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        /*if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-        }
+        }*/
 
         // Check for a valid username.
         if (TextUtils.isEmpty(username)) {
@@ -102,8 +106,16 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 4;
     }
 
-    public void openMenu(){
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
+    public void login(String result){
+        try{
+            JSONObject jsonUser = new JSONObject(result);
+            if(jsonUser!=null){
+                user = new User(jsonUser.getString("_id"), jsonUser.getString("username"));
+                Intent intent = new Intent(this, MenuActivity.class);
+                startActivity(intent);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 }
