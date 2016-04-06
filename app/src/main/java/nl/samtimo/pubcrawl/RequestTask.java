@@ -1,6 +1,7 @@
 package nl.samtimo.pubcrawl;
 
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -37,6 +38,8 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     private MyRacesDetailFragment myRacesDetailFragment;
     private RacesUsersListFragment racesUsersListFragment;
     private RacesDetailFragment racesDetailFragment;
+
+    private Fragment fragment;//TODO
 
     public RequestTask(LoginActivity loginActivity){
         this.loginActivity = loginActivity;
@@ -84,8 +87,9 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
         this.racesUsersListFragment = racesUsersListFragment;
     }
 
-    public RequestTask(RacesDetailFragment racesDetailFragment){
+    public RequestTask(RacesDetailFragment racesDetailFragment, String callback){
         this.racesDetailFragment = racesDetailFragment;
+        this.callback = callback;
     }
 
     protected String doInBackground(Request... requests) {
@@ -137,7 +141,12 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
 
             return parseResponse(connection.getInputStream());
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            try{
+                System.out.println(parseResponse(connection.getErrorStream()));
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
         } finally {
             if (connection != null) connection.disconnect();
         }
@@ -192,7 +201,16 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                 else myRacesDetailFragment.saveRaceFinish();
             }
             else if(racesUsersListFragment!=null) racesUsersListFragment.loadUsersFinish(result);
-            else if(racesDetailFragment!=null) racesDetailFragment.joinRaceFinish();
+            else if(racesDetailFragment!=null){
+                if(callback!=null){
+                    switch (callback){
+                        case "join": racesDetailFragment.joinRaceFinish(); break;
+                        case "leave": racesDetailFragment.leaveRaceFinish(); break;
+                        case "tag": racesDetailFragment.updateTagFinish(result); break;
+                        case "untag": racesDetailFragment.updateUntagFinish(result); break;
+                    }
+                }
+            }
             else System.out.println(result);
         }else System.out.println("result is empty");
     }

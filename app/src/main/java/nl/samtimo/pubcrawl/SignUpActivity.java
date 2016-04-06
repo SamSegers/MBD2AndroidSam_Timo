@@ -65,5 +65,6 @@ public class SignUpActivity extends AppCompatActivity {
     public void openMenu(){
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
+        //TODO populate static user
     }
 }

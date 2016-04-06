@@ -15,7 +15,7 @@ public class Race {
     private String id;
     private String name;
     private ArrayList<Pub> waypoints;
-    private ArrayList<User> users;
+    //private ArrayList<User> users;
     private Date startDate;
     private Date endDate;
     private Bitmap image;
@@ -25,7 +25,7 @@ public class Race {
         this.id = id;
         this.name = name;
         this.waypoints = waypoints!=null?waypoints:new ArrayList<Pub>();
-        this.users = users!=null?users:new ArrayList<User>();
+        //this.users = users!=null?users:new ArrayList<User>();
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -55,13 +55,14 @@ public class Race {
     public void setWaypoint(Pub pub, boolean inRace){
         if(!waypoints.contains(pub) && inRace) waypoints.add(pub);
         else if(waypoints.contains(pub) && !inRace) waypoints.remove(pub);
+        System.out.println("WAYPOINTS: "+waypoints.size());
     }
 
     public ArrayList<Pub> getWaypoints(){
         return waypoints;
     }
 
-    public ArrayList<User> getUsers(){
+    /*public ArrayList<User> getUsers(){
         return users;
-    }
+    }*/
 }

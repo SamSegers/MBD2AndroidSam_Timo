@@ -11,7 +11,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     // UI references.
@@ -110,7 +113,18 @@ public class LoginActivity extends AppCompatActivity {
         try{
             JSONObject jsonUser = new JSONObject(result);
             if(jsonUser!=null){
-                user = new User(jsonUser.getString("_id"), jsonUser.getString("username"));
+                JSONArray jsonRaces = jsonUser.getJSONArray("race");
+                ArrayList<Race> races = new ArrayList<>();
+                for (int i=0; i<jsonRaces.length(); i++) {
+                    JSONObject jsonRace = jsonRaces.getJSONObject(i);
+                    JSONArray jsonPubs = jsonRace.getJSONArray("tagged");
+                    ArrayList<Pub> pubs = new ArrayList<>();
+                    for(int j=0;j<jsonPubs.length();j++){
+                        pubs.add(new Pub(jsonPubs.getString(j), null, null));
+                    }
+                    races.add(new Race(jsonRace.getString("id"), /*jsonRace.getString("name")*/null, pubs, null, null));
+                }
+                user = new User(jsonUser.getString("_id"), jsonUser.getString("username"), races);
                 Intent intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
             }
@@ -118,4 +132,17 @@ public class LoginActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
+    public void simpleSignIn(){
+
+    }
+
+    //TODO find more appropriate way
+    /*public void updateUser(){
+
+    }
+
+    public void updateUserFinish(){
+
+    }*/
 }

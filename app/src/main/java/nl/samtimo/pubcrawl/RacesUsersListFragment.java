@@ -34,6 +34,7 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
     }
 
     public void loadUsers(Race race){
+        adapter.setRace(race);
         Request request = new Request(RequestMethod.GET, "races/"+race.getId()+"/users", null, null);
         new RequestTask(this).execute(request);
     }
@@ -43,8 +44,22 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
         try{
             JSONArray usersArr = new JSONArray(result);
             for (int i=0; i<usersArr.length(); i++) {
-                JSONObject user = usersArr.getJSONObject(i);
-                users.add(new User(user.getString("_id"), user.getString("username")));
+                JSONObject jsonUser = usersArr.getJSONObject(i);
+                JSONArray jsonRaces = jsonUser.getJSONArray("race");
+                ArrayList<Race> races = new ArrayList<>();
+                for (int j=0; j<jsonRaces.length(); j++) {
+                    JSONObject jsonRace = jsonRaces.getJSONObject(j);
+                    JSONArray jsonPubs = jsonRace.getJSONArray("tagged");
+                    ArrayList<Pub> pubs = new ArrayList<>();
+                    for(int k=0;k<jsonPubs.length();k++){
+                        pubs.add(new Pub(jsonPubs.getString(k), null, null));
+                        /*JSONObject jsonPub = jsonPubs.getJSONObject(k);
+                        pubs.add(new Pub(jsonPub.getString("id"), jsonPub.getString("name"), null));*/
+                        //races.add(new Race(jsonRace.getString("id"), jsonRace.getString("name"), null, null, null));
+                    }
+                    races.add(new Race(jsonRace.getString("id"), null/*jsonRace.getString("name")*/, pubs, null, null));
+                }
+                users.add(new User(jsonUser.getString("_id"), jsonUser.getString("username"), races));
             }
             adapter.notifyDataSetChanged();
 
@@ -57,12 +72,9 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
 
     //TODO uses contains()
     public boolean contains(User user){
-        for(int i=0;i<users.size();i++){
-            //System.out.println(users.get(i).getId().equals(user.getId()));
+        for(int i=0;i<users.size();i++)
             if(users.get(i).getId().equals(user.getId())) return true;
-        }
         return false;
-        //return users.contains(user);
     }
 
     @Override

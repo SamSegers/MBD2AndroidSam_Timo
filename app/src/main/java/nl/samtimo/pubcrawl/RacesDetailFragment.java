@@ -10,7 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -23,9 +29,14 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
 
     private OnFragmentInteractionListener mListener;
 
+    private ArrayList<Pub> pubs;
+    private RacesPubsListAdapter adapter;
+
+    private Pub selectedPub;
     private Race selectedRace;
 
     public RacesDetailFragment() {
+        pubs = new ArrayList<>();
         // Required empty public constructor
     }
 
@@ -36,8 +47,19 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_races_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_races_detail, container, false);
+        // get the ListView from fragment_list
+        ListView listView = (ListView) rootView.findViewById(R.id.list_pubs);
+        // register ListView so I can use it with the context menu
+        registerForContextMenu(listView);
+        // create adapter, parameters: activity, layout of individual items, array of values
+        adapter = new RacesPubsListAdapter(getActivity(), pubs);
+        // set the adapter to the ListView
+        listView.setAdapter(adapter);
+        // add actionlistener
+        listView.setOnItemClickListener(this);
+
+        return rootView;
     }
 
     public void updateDetails(Race race){
@@ -50,6 +72,7 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
         textView.setText(race.getName());
 
         updateJoinButton();
+        loadPubs();
     }
 
     public void updateJoinButton(){
@@ -57,21 +80,91 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
 
         Button btnJoinRace = (Button)getActivity().findViewById(R.id.button_join_race);
         btnJoinRace.setVisibility(View.VISIBLE);
-        System.out.println(racesUsersListFragment.contains(LoginActivity.user));
-        if(racesUsersListFragment.contains(LoginActivity.user)) btnJoinRace.setText(R.string.button_leave_race);
-        else btnJoinRace.setText(R.string.button_join_race);
+        if(racesUsersListFragment.contains(LoginActivity.user)){
+            btnJoinRace.setText(R.string.button_leave_race);
+            btnJoinRace.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    leaveRace();
+                }
+            });
+        }else{
+            btnJoinRace.setText(R.string.button_join_race);
+            btnJoinRace.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    joinRace();
+                }
+            });
+        }
+    }
+
+    public void leaveRace(){
+        if(selectedRace!=null){
+            Request request = new Request(RequestMethod.PUT, "races/"+selectedRace.getId()+"/leave", null, null);
+            new RequestTask(this, "leave").execute(request);
+        }else System.out.println("no race selected");
+    }
+
+    public void leaveRaceFinish(){
+        RacesUsersListFragment racesUsersListFragment = (RacesUsersListFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_races_users_list);
+        racesUsersListFragment.loadUsers(selectedRace);
     }
 
     public void joinRace(){
         if(selectedRace!=null){
             Request request = new Request(RequestMethod.PUT, "races/"+selectedRace.getId()+"/join", null, null);
-            new RequestTask(this).execute(request);
+            new RequestTask(this, "join").execute(request);
         }else System.out.println("no race selected");
     }
 
     public void joinRaceFinish(){
         RacesUsersListFragment racesUsersListFragment = (RacesUsersListFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_races_users_list);
         racesUsersListFragment.loadUsers(selectedRace);
+    }
+
+    public ArrayList<Pub> getWaypoints(){
+        return selectedRace.getWaypoints();
+    }
+
+    public Race getRace(){
+        return selectedRace;
+    }
+
+    public void loadPubs(){
+        if(selectedRace!=null){
+            try{
+                pubs.clear();
+                ArrayList<Pub> toLoadPubs = selectedRace.getWaypoints();
+                for(int i=0;i<toLoadPubs.size();i++)
+                    pubs.add(toLoadPubs.get(i));
+
+                adapter.notifyDataSetChanged();
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }else System.out.println("no race selected");
+    }
+
+    public void updateTag(Pub pub, boolean checked){
+        selectedPub = pub;
+        if(checked){
+            Request request = new Request(RequestMethod.PUT, "users/race/"+selectedRace.getId()+"/pub/"+pub.getId()+"/tag", null, null);
+            new RequestTask(this, "tag").execute(request);
+        }else{
+            Request request = new Request(RequestMethod.PUT, "users/race/"+selectedRace.getId()+"/pub/"+pub.getId()+"/untag", null, null);
+            new RequestTask(this, "untag").execute(request);
+        }
+    }
+
+    public void updateTagFinish(String result){
+        LoginActivity.user.addTag(selectedRace, selectedPub);
+        joinRaceFinish();
+    }
+
+    public void updateUntagFinish(String result){
+        LoginActivity.user.removeTag(selectedRace, selectedPub);
+        joinRaceFinish();
     }
 
     // TODO: use something like this

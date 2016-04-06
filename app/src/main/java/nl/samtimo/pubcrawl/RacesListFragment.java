@@ -47,7 +47,16 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
             JSONArray racesArr = new JSONArray(json);
             for (int i=0; i<racesArr.length(); i++) {
                 JSONObject race = racesArr.getJSONObject(i);
-                races.add(new Race(race.getString("_id"), race.getString("name"), null, null, null));
+                ArrayList<Pub> waypoints = new ArrayList<>();
+                if(race.has("pubs")){
+                    JSONArray waypointsArr = race.getJSONArray("pubs");
+                    for(int j=0;j<waypointsArr.length();j++){
+                        JSONObject waypoint = waypointsArr.optJSONObject(j);
+                        if(waypoint!=null && waypoint.has("id") && waypoint.has("name"))
+                            waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));
+                    }
+                }
+                races.add(new Race(race.getString("_id"), race.getString("name"), waypoints, null, null));
             }
             adapter.notifyDataSetChanged();
         }catch(Exception ex){

@@ -61,7 +61,6 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
                 if(race.has("pubs")){
                     JSONArray waypointsArr = race.getJSONArray("pubs");
                     for(int j=0;j<waypointsArr.length();j++){
-                        System.out.println("race");
                         JSONObject waypoint = waypointsArr.optJSONObject(j);
                         if(waypoint!=null && waypoint.has("id") && waypoint.has("name"))
                             waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));

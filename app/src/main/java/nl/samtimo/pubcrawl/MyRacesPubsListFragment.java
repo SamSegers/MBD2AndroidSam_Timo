@@ -80,7 +80,6 @@ public class MyRacesPubsListFragment extends Fragment  implements AdapterView.On
     }
 
     public void loadPubs(String result){
-        System.out.println(result);
         try{
             JSONObject pubsObj = new JSONObject(result);
             JSONArray pubsArr = pubsObj.getJSONArray("pub");

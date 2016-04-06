@@ -18,6 +18,8 @@ public class UserListAdapter extends ArrayAdapter<User> {
     private final Activity context;
     private final ArrayList<User> items;
 
+    private Race currentRace;
+
     public UserListAdapter(Activity context, ArrayList<User> items) {
         super(context, R.layout.list_item_user, items);
 
@@ -25,12 +27,31 @@ public class UserListAdapter extends ArrayAdapter<User> {
         this.items = items;
     }
 
+    public void setRace(Race race){
+        currentRace = race;
+    }
+
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.list_item_race, null, true);
+        View rowView = inflater.inflate(R.layout.list_item_user, null, true);
+
+        User user = items.get(position);
 
         TextView txtLabel = (TextView) rowView.findViewById(R.id.item_label);
-        txtLabel.setText(items.get(position).getName());
+        txtLabel.setText(user.getName());
+
+        if(currentRace!=null){
+            String count = String.valueOf(user.getTagCount(currentRace));
+            TextView txtCount = (TextView) rowView.findViewById(R.id.item_count);
+            txtCount.setText(count);
+        }
+
+        /*ArrayList<Pub> waypoints = items.get(position).getWaypoints();
+
+        if(waypoints!=null){
+            TextView txtCount = (TextView) rowView.findViewById(R.id.item_count);
+            txtCount.setText(waypoints.size());
+        }*/
 
         return rowView;
     };
