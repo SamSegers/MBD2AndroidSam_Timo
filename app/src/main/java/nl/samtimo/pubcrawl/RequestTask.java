@@ -3,6 +3,7 @@ package nl.samtimo.pubcrawl;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.Menu;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -38,6 +39,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     private MyRacesDetailFragment myRacesDetailFragment;
     private RacesUsersListFragment racesUsersListFragment;
     private RacesDetailFragment racesDetailFragment;
+    private MenuActivity menuActivity;
 
     private Fragment fragment;//TODO
 
@@ -89,6 +91,11 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
 
     public RequestTask(RacesDetailFragment racesDetailFragment, String callback){
         this.racesDetailFragment = racesDetailFragment;
+        this.callback = callback;
+    }
+
+    public RequestTask(MenuActivity menuActivity, String callback){
+        this.menuActivity = menuActivity;
         this.callback = callback;
     }
 
@@ -210,6 +217,9 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                         case "untag": racesDetailFragment.updateUntagFinish(result); break;
                     }
                 }
+            }
+            else if(menuActivity!=null && callback=="logout"){
+                menuActivity.logoutFinish();
             }
             else System.out.println(result);
         }else System.out.println("result is empty");
