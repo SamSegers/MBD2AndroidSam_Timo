@@ -1,9 +1,9 @@
 package nl.samtimo.pubcrawl;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.Menu;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -25,77 +25,25 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
         cookieManager = new CookieManager();
     }
 
-    //TODO code review
-
     private String callback;
+    private Fragment fragment;
+    private Activity activity;
 
-    private LoginActivity loginActivity;
-    private SignUpActivity signUpActivity;
-    private RacesListFragment racesListFragment;
-    private PubsListFragment pubsListFragment;
-    private PubsDetailFragment pubsDetailFragment;
-    private MyRacesPubsListFragment myRacesPubsListFragment;
-    private MyRacesListFragment myRacesListFragment;
-    private MyRacesDetailFragment myRacesDetailFragment;
-    private RacesUsersListFragment racesUsersListFragment;
-    private RacesDetailFragment racesDetailFragment;
-    private MenuActivity menuActivity;
-
-    private Fragment fragment;//TODO
-
-    public RequestTask(LoginActivity loginActivity){
-        this.loginActivity = loginActivity;
+    public RequestTask(Activity activity){
+        this.activity = activity;
     }
 
-    public RequestTask(SignUpActivity signUpActivity){
-        this.signUpActivity = signUpActivity;
-    }
-
-    public RequestTask(RacesListFragment racesListFragment){
-        this.racesListFragment = racesListFragment;
-    }
-
-    public RequestTask(PubsListFragment pubsListFragment){
-        this.pubsListFragment = pubsListFragment;
-    }
-
-    public RequestTask(PubsDetailFragment pubsDetailFragment){
-        this.pubsDetailFragment = pubsDetailFragment;
-    }
-
-    public RequestTask(MyRacesPubsListFragment myRacesPubsListFragment){
-        this.myRacesPubsListFragment = myRacesPubsListFragment;
-    }
-
-    public RequestTask(MyRacesListFragment myRacesListFragment){
-        this.myRacesListFragment = myRacesListFragment;
-    }
-
-    public RequestTask(MyRacesListFragment myRacesListFragment, String callback){
-        this.myRacesListFragment = myRacesListFragment;
+    public RequestTask(Activity activity, String callback){
+        this.activity = activity;
         this.callback = callback;
     }
 
-    public RequestTask(MyRacesDetailFragment myRacesDetailFragment){
-        this.myRacesDetailFragment = myRacesDetailFragment;
+    public RequestTask(Fragment fragment){
+        this.fragment = fragment;
     }
 
-    public RequestTask(MyRacesDetailFragment myRacesDetailFragment, String callback){
-        this.myRacesDetailFragment = myRacesDetailFragment;
-        this.callback = callback;
-    }
-
-    public RequestTask(RacesUsersListFragment racesUsersListFragment){
-        this.racesUsersListFragment = racesUsersListFragment;
-    }
-
-    public RequestTask(RacesDetailFragment racesDetailFragment, String callback){
-        this.racesDetailFragment = racesDetailFragment;
-        this.callback = callback;
-    }
-
-    public RequestTask(MenuActivity menuActivity, String callback){
-        this.menuActivity = menuActivity;
+    public RequestTask(Fragment fragment, String callback){
+        this.fragment = fragment;
         this.callback = callback;
     }
 
@@ -137,9 +85,6 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                 for (int i = 0; i < properties.length; i++)
                     connection.setRequestProperty(properties[i].getName(), properties[i].getValue());
             }
-            //connection.setRequestProperty("Accept", "*/*");
-
-            //connection.connect();
 
             saveCookie(connection);
 
@@ -193,23 +138,30 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
         if(result!=null) {
-            if (loginActivity!=null) loginActivity.login(result);
-            else if (signUpActivity!=null && result.equals("signed up")) signUpActivity.openMenu();
-            else if(racesListFragment!=null) racesListFragment.loadRaces(result);
-            else if(pubsListFragment!=null) pubsListFragment.loadPubs(result);
-            else if(pubsDetailFragment!=null) pubsDetailFragment.addPubCont(result);
-            else if(myRacesPubsListFragment !=null) myRacesPubsListFragment.loadPubs(result);
-            else if(myRacesListFragment!=null){
-                if(callback!=null && callback=="add") myRacesListFragment.addRaceFinish(result);
-                else myRacesListFragment.loadRaces(result);
-            }
-            else if(myRacesDetailFragment!=null){
-                if(callback!=null && callback=="remove") myRacesDetailFragment.removeRaceFinish();
-                else myRacesDetailFragment.saveRaceFinish();
-            }
-            else if(racesUsersListFragment!=null) racesUsersListFragment.loadUsersFinish(result);
-            else if(racesDetailFragment!=null){
-                if(callback!=null){
+            if(activity!=null){
+                if(activity instanceof LoginActivity) ((LoginActivity)activity).login(result);
+                else if(activity instanceof SignUpActivity) ((SignUpActivity)activity).signUp(result);
+                else if(activity instanceof MenuActivity) ((MenuActivity)activity).logoutFinish();
+            }else if(fragment!=null){
+                if(fragment instanceof RacesListFragment) ((RacesListFragment)fragment).loadRaces(result);
+                else if(fragment instanceof PubsListFragment) ((PubsListFragment)fragment).loadPubs(result);
+                else if(fragment instanceof PubsDetailFragment) ((PubsDetailFragment)fragment).addPubFinish(result);
+                else if(fragment instanceof MyRacesPubsListFragment) ((MyRacesPubsListFragment)fragment).loadPubs(result);
+                else if(fragment instanceof RacesUsersListFragment) ((RacesUsersListFragment)fragment).loadUsersFinish(result);
+                else if(fragment instanceof MyRacesListFragment){
+                    MyRacesListFragment myRacesListFragment = (MyRacesListFragment)fragment;
+                    switch(callback){
+                        case "add": myRacesListFragment.addRaceFinish(result); break;
+                        case "load": myRacesListFragment.loadRaces(result); break;
+                    }
+                }else if(fragment instanceof MyRacesDetailFragment){
+                    MyRacesDetailFragment myRacesDetailFragment = (MyRacesDetailFragment)fragment;
+                    switch(callback){
+                        case "remove": myRacesDetailFragment.removeRaceFinish(); break;
+                        case "save": myRacesDetailFragment.saveRaceFinish(); break;
+                    }
+                }else if(fragment instanceof RacesDetailFragment){
+                    RacesDetailFragment racesDetailFragment = (RacesDetailFragment)fragment;
                     switch (callback){
                         case "join": racesDetailFragment.joinRaceFinish(); break;
                         case "leave": racesDetailFragment.leaveRaceFinish(); break;
@@ -217,11 +169,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                         case "untag": racesDetailFragment.updateUntagFinish(result); break;
                     }
                 }
-            }
-            else if(menuActivity!=null && callback=="logout"){
-                menuActivity.logoutFinish();
-            }
-            else System.out.println(result);
+            }else System.out.println(result);
         }else System.out.println("result is empty");
     }
 }

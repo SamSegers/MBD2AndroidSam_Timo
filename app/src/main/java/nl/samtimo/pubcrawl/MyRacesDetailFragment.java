@@ -69,7 +69,7 @@ public class MyRacesDetailFragment extends Fragment {
 
         System.out.println(requestBody);
         Request request = new Request(RequestMethod.PUT, requestRoute, requestBody, null);
-        new RequestTask(this).execute(request);
+        new RequestTask(this, "save").execute(request);
     }
 
     //TODO avoid changing the name when the request failed

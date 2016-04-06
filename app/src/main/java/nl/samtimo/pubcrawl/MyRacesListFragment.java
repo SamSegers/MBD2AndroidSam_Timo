@@ -48,7 +48,7 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
 
     public void reloadRaces(){
         Request request = new Request(RequestMethod.GET, "users/racescreated", null, null);
-        new RequestTask(this).execute(request);
+        new RequestTask(this, "load").execute(request);
     }
 
     public void loadRaces(String json){

@@ -62,9 +62,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    public void openMenu(){
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
+    public void signUp(String result){
+        if(result.equals("signed up")){
+            Intent intent = new Intent(this, MenuActivity.class);
+            startActivity(intent);
+        }
         //TODO populate static user
     }
 }
