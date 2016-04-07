@@ -145,7 +145,13 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
             }else if(fragment!=null){
                 if(fragment instanceof RacesListFragment) ((RacesListFragment)fragment).loadRaces(result);
                 else if(fragment instanceof PubsListFragment) ((PubsListFragment)fragment).loadPubs(result);
-                else if(fragment instanceof PubsDetailFragment) ((PubsDetailFragment)fragment).addPubFinish(result);
+                else if(fragment instanceof PubsDetailFragment){
+                    PubsDetailFragment pubsDetailFragment = (PubsDetailFragment)fragment;
+                    switch(callback){
+                        case "add": pubsDetailFragment.addPubFinish(result); break;
+                        case "info": pubsDetailFragment.loadInfo(result); break;
+                    }
+                }
                 else if(fragment instanceof MyRacesPubsListFragment) ((MyRacesPubsListFragment)fragment).loadPubs(result);
                 else if(fragment instanceof RacesUsersListFragment) ((RacesUsersListFragment)fragment).loadUsersFinish(result);
                 else if(fragment instanceof MyRacesListFragment){
@@ -169,7 +175,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                         case "untag": racesDetailFragment.updateUntagFinish(result); break;
                     }
                 }
-            }else System.out.println(result);
+            }//else System.out.println(result);
         }else System.out.println("result is empty");
     }
 }

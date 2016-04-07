@@ -11,7 +11,8 @@ public class PubsActivity extends FragmentActivity implements PubsListFragment.O
     @Override
     protected void onStart(){
         super.onStart();
-        findViewById(R.id.add_pub_button).setVisibility(View.GONE);
+        findViewById(R.id.button_add).setVisibility(View.GONE);
+        findViewById(R.id.layout_reviews).setVisibility(View.GONE);
     }
 
     @Override
@@ -19,12 +20,12 @@ public class PubsActivity extends FragmentActivity implements PubsListFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pubs);
 
-        Button addPubButton = (Button) findViewById(R.id.add_pub_button);
+        Button addPubButton = (Button) findViewById(R.id.button_add);
         addPubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            PubsDetailFragment detailFragment = (PubsDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_pubs_detail);
-            detailFragment.addPub();
+                PubsDetailFragment detailFragment = (PubsDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_pubs_detail);
+                detailFragment.addPub();
             }
         });
     }

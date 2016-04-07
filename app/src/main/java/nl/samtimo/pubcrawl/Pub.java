@@ -23,7 +23,6 @@ public class Pub {
         this.id = id;
         this.name = name;
         this.imageURL = imageURL;
-        System.out.println(name);
     }
 
     public String getId(){
@@ -35,7 +34,6 @@ public class Pub {
     }
 
     public void initImage(ImageView imageView){
-        System.out.println("download image task");
         new DownloadImageTask(imageView).execute(imageURL);
         /*try {
             InputStream inputStream = (InputStream)new URL(imageURL).getContent();

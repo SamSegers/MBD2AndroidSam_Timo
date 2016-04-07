@@ -10,7 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -25,8 +31,11 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
 
     private Pub seletedPub;
 
+    private ArrayList<Review> reviews;
+    private PubReviewListAdapter adapter;
+
     public PubsDetailFragment() {
-        // Required empty public constructor
+        reviews = new ArrayList<>();
     }
 
     @Override
@@ -36,8 +45,19 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pubs_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_pubs_detail, container, false);
+        // get the ListView from fragment_list
+        ListView listView = (ListView) rootView.findViewById(R.id.list_pub_reviews);
+        // register ListView so I can use it with the context menu
+        registerForContextMenu(listView);
+        // create adapter, parameters: activity, layout of individual items, array of values
+        adapter = new PubReviewListAdapter(getActivity(), reviews);
+        // set the adapter to the ListView
+        listView.setAdapter(adapter);
+        // add actionlistener
+        listView.setOnItemClickListener(this);
+
+        return rootView;
     }
 
     @Override
@@ -63,7 +83,7 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
 
     public void addPub(){
         Request request = new Request(RequestMethod.PUT, "users/pubs/"+seletedPub.getId()+"/name/"+seletedPub.getName().replaceAll(" ", "_"), null, null);
-        new RequestTask(PubsDetailFragment.this).execute(request);
+        new RequestTask(this, "add").execute(request);
     }
 
     //TODO
@@ -73,10 +93,38 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
 
     public void updateDetails(Pub pub){
         seletedPub = pub;
-        TextView textView = (TextView)getActivity().findViewById(R.id.text_detail);
-        textView.setText(pub.getName().toLowerCase());
 
-        getActivity().findViewById(R.id.add_pub_button).setVisibility(View.VISIBLE);
+        System.out.println(pub.getName());
+
+        TextView textView = (TextView)getActivity().findViewById(R.id.text_header);
+        textView.setText(pub.getName().toString());
+
+        Request request = new Request(RequestMethod.GET, "pubs/"+pub.getId(), null, null);
+        new RequestTask(this, "info").execute(request);
+
+        getActivity().findViewById(R.id.button_add).setVisibility(View.VISIBLE);
+    }
+
+    public void loadInfo(String json){
+        try{
+            JSONObject jsonResult = new JSONObject(json).getJSONObject("result");
+            if(jsonResult.has("reviews")){
+                System.out.println("has reviews");
+                JSONArray jsonReviews = jsonResult.getJSONArray("reviews");
+                System.out.println("amount of reviews: "+jsonReviews.length());
+                for (int i=0; i<jsonReviews.length(); i++) {
+                    JSONObject jsonReview = jsonReviews.getJSONObject(i);
+                    if(jsonReview.has("author_name") && jsonReview.has("text")){
+                        reviews.add(new Review(jsonReview.getString("author_name"), jsonReview.getString("text")));
+                        getActivity().findViewById(R.id.layout_reviews).setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public interface OnFragmentInteractionListener {

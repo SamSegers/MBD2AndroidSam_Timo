@@ -26,7 +26,6 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Pub> pubs;
-    private View rootView;
     private PubListAdapter adapter;
 
     public PubsListFragment() {
@@ -47,22 +46,19 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
             JSONArray results = object.getJSONArray("results");
             for (int i=0; i<results.length(); i++) {
                 JSONObject result = results.getJSONObject(i);
-                pubs.add(new Pub(result.getString("id"), result.getString("name"), result.getString("icon")));
+                pubs.add(new Pub(result.getString("place_id"), result.getString("name"), result.getString("icon")));
+                System.out.println(result.getString("id"));
             }
         }catch(Exception ex){
             ex.printStackTrace();
+        }finally{
+            adapter.notifyDataSetChanged();
         }
-
-        //XXX: this solved the problem of the adapter not updating :/
-        ListView listView = (ListView) rootView.findViewById(R.id.list_pubs);
-        adapter = new PubListAdapter(getActivity(), pubs);
-        // set the adapter to the ListView
-        listView.setAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_pubs_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_pubs_list, container, false);
         // get the ListView from fragment_list
         ListView listView = (ListView) rootView.findViewById(R.id.list_pubs);
         // register ListView so I can use it with the context menu
