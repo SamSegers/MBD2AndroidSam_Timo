@@ -165,6 +165,8 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                     switch(callback){
                         case "remove": myRacesDetailFragment.removeRaceFinish(); break;
                         case "save": myRacesDetailFragment.saveRaceFinish(); break;
+                        case "start": myRacesDetailFragment.startRaceFinish(); break;
+                        case "stop": myRacesDetailFragment.stopRaceFinish(); break;
                     }
                 }else if(fragment instanceof RacesDetailFragment){
                     RacesDetailFragment racesDetailFragment = (RacesDetailFragment)fragment;

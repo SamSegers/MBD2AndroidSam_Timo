@@ -31,6 +31,8 @@
     <string name="button_add_pub">add to collection</string>
     <string name="button_join_race">join race</string>
     <string name="button_leave_race">leave race</string>
+    <string name="button_start_race">start race</string>
+    <string name="button_stop_race">stop race</string>
 
     <string name="fragment_races_detail_placeholder">select a race</string>
     <string name="fragment_pubs_detail_placeholder">select a pub</string>

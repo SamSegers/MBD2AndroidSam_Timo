@@ -59,8 +59,8 @@ public class MyRacesPubsListFragment extends Fragment  implements AdapterView.On
         return rootView;
     }
 
-    public void testChecked(){
-        adapter.testChecked();
+    public void update(Race race){
+        if(race!=null) adapter.setRace(race);
     }
 
     @Override

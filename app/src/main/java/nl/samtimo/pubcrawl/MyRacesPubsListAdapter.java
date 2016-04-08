@@ -22,11 +22,18 @@ public class MyRacesPubsListAdapter extends ArrayAdapter<Pub> {
     private final FragmentActivity context;
     private final ArrayList<Pub> items;
 
+    private Race race;
+
     public MyRacesPubsListAdapter(FragmentActivity context, ArrayList<Pub> items) {
         super(context, R.layout.list_item_pub_selectable, items);
 
         this.context = context;
         this.items = items;
+    }
+
+    public void setRace(Race race){
+        this.race = race;
+        notifyDataSetChanged();
     }
 
     public View getView(final int position, View view, ViewGroup parent) {
@@ -37,37 +44,27 @@ public class MyRacesPubsListAdapter extends ArrayAdapter<Pub> {
         txtLabel.setText(items.get(position).getName());
 
         CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.item_checkbox);
-        MyRacesDetailFragment myRacesDetailFragment = (MyRacesDetailFragment)context.getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
-        ArrayList<Pub> waypoints = myRacesDetailFragment.getWaypoints();
-        if(waypoints!=null){
-            for(int i=0;i<waypoints.size();i++){
-                if(waypoints.get(i).getId().equals(items.get(position).getId())){
-                    checkBox.setChecked(true);
-                    break;
+        checkBox.setEnabled(race!=null);
+
+        if(race!=null){
+            ArrayList<Pub> waypoints = race.getWaypoints();
+            if(waypoints!=null){
+                for(int i=0;i<waypoints.size();i++){
+                    if(waypoints.get(i).getId().equals(items.get(position).getId())){
+                        checkBox.setChecked(true);
+                        break;
+                    }
                 }
             }
-            //checkBox.setChecked(waypoints.contains(items.get(position)));
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    MyRacesDetailFragment myRacesDetailFragment = (MyRacesDetailFragment)context.getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
+                    myRacesDetailFragment.updatePub(items.get(position), isChecked);
+                }
+            });
         }
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                MyRacesDetailFragment myRacesDetailFragment = (MyRacesDetailFragment)context.getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
-                myRacesDetailFragment.updatePub(items.get(position), isChecked);
-            }
-        });
 
         return rowView;
     };
-
-    public void testChecked(){
-        for(int i=0;i<items.size();i++){
-            //items.get(i)
-            /*CheckBox checkBox = (CheckBox) context.findViewById(R.id.item_checkbox);
-            MyRacesDetailFragment myRacesDetailFragment = (MyRacesDetailFragment)context.getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
-            ArrayList<Pub> waypoints = myRacesDetailFragment.getWaypoints();
-            checkBox.setChecked(waypoints.contains(items.get(i)));
-            System.out.println("checkbox: "+checkBox.isChecked());*/
-        }
-        notifyDataSetChanged();
-    }
 }

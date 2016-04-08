@@ -26,22 +26,25 @@
 
         <Button
             android:id="@+id/button_save"
+            android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_above="@+id/button_start_now"
+            android:layout_above="@+id/button_status"
             android:text="Save race"/>
 
         <Button
-            android:id="@+id/button_start_now"
+            android:id="@+id/button_status"
+            android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_above="@+id/button_remove"
-            android:text="Start now"/>
+            android:text="@string/button_start_race"/>
 
         <Button
             android:id="@+id/button_remove"
+            android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

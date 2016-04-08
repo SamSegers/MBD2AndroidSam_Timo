@@ -15,8 +15,10 @@ import android.widget.ListView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 /**
@@ -56,17 +58,36 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
         try{
             JSONArray racesArr = new JSONArray(json);
             for (int i=0; i<racesArr.length(); i++) {
-                JSONObject race = racesArr.getJSONObject(i);
+                JSONObject jRace = racesArr.getJSONObject(i);
                 ArrayList<Pub> waypoints = new ArrayList<>();
-                if(race.has("pubs")){
-                    JSONArray waypointsArr = race.getJSONArray("pubs");
+                System.out.println(jRace.toString());
+                if(jRace.has("pubs")){
+                    JSONArray waypointsArr = jRace.getJSONArray("pubs");
                     for(int j=0;j<waypointsArr.length();j++){
                         JSONObject waypoint = waypointsArr.optJSONObject(j);
                         if(waypoint!=null && waypoint.has("id") && waypoint.has("name"))
                             waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));
                     }
                 }
-                races.add(new Race(race.getString("_id"), race.getString("name"), waypoints, null, null));
+
+                Date startDate = null;
+                Date endDate = null;
+
+                if(jRace.has("startDate")){
+                    String strDate = jRace.getString("startDate");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");//"yyyy-MM-dd HH:mm:ss z");
+                    //format.setTimeZone(TimeZone.getTimeZone("GTM+1"));
+                    startDate = format.parse(strDate);
+                }
+
+                if(jRace.has("endDate")){
+                    String strDate = jRace.getString("endDate");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");//"yyyy-MM-dd HH:mm:ss z");
+                    //format.setTimeZone(TimeZone.getTimeZone("GTM+1"));
+                    endDate = format.parse(strDate);
+                }
+
+                races.add(new Race(jRace.getString("_id"), jRace.getString("name"), waypoints, startDate, endDate));
             }
             adapter.notifyDataSetChanged();
         }catch(Exception ex){

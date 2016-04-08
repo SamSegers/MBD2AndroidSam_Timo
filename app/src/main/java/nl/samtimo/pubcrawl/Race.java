@@ -62,6 +62,30 @@ public class Race {
         return waypoints;
     }
 
+    /*public Date getStartDate(){
+        return startDate;
+    }
+
+    public Date getEndDate(){
+        return endDate;
+    }*/
+
+    public boolean isOngoing(){
+        return startDate!=null && startDate.before(new Date()) && !isCompleted();
+    }
+
+    public boolean isCompleted(){
+        return endDate!=null && endDate.before(new Date()) && endDate.after(startDate);
+    }
+
+    public void setStartDate(){
+        startDate = new Date();
+    }
+
+    public void setEndDate(){
+        endDate = new Date();
+    }
+
     /*public ArrayList<User> getUsers(){
         return users;
     }*/

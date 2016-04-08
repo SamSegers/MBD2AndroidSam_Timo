@@ -31,15 +31,6 @@ public class MyRacesActivity extends FragmentActivity implements MyRacesListFrag
             }
         });
 
-        Button btnStartRace = (Button) findViewById(R.id.button_start_now);
-        btnStartRace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyRacesDetailFragment detailFragment = (MyRacesDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
-                detailFragment.startRace();
-            }
-        });
-
         Button btnRemoveRace = (Button) findViewById(R.id.button_remove);
         btnRemoveRace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +53,10 @@ public class MyRacesActivity extends FragmentActivity implements MyRacesListFrag
 
     @Override
     public void onListFragmentInteraction(Race race) {
-        MyRacesDetailFragment detailFragment = (MyRacesDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
-        detailFragment.updateDetails(race);
+        MyRacesDetailFragment fragmentDetail = (MyRacesDetailFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_detail);
+        fragmentDetail.updateDetails(race);
+
+        MyRacesPubsListFragment fragmentPubsList = (MyRacesPubsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_pub_list);
+        fragmentPubsList.update(race);
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -40,13 +41,43 @@ public class MyRacesDetailFragment extends Fragment {
 
     public void updateDetails(Race race){
         selectedRace = race;
+
+        if(selectedRace.isCompleted()){
+            getActivity().findViewById(R.id.button_save).setEnabled(false);
+            getActivity().findViewById(R.id.button_status).setEnabled(false);
+            getActivity().findViewById(R.id.list_my_races).setEnabled(false);
+        }
+        getActivity().findViewById(R.id.button_remove).setEnabled(true);
+
         TextView textHeader = (TextView)getActivity().findViewById(R.id.text_header);
         textHeader.setText(race.getName());
         EditText editName = (EditText)getActivity().findViewById(R.id.edit_name);
         editName.setText(race.getName());
 
-        MyRacesPubsListFragment myRacesPubsListFragment = (MyRacesPubsListFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_my_races_pub_list);
-        myRacesPubsListFragment.testChecked();
+        updateStatusButton();
+    }
+
+    public void updateStatusButton(){
+        Button btnStatus = (Button)getActivity().findViewById(R.id.button_status);
+
+        //if(racesUsersListFragment.contains(LoginActivity.user)){
+        if(selectedRace!=null && selectedRace.isOngoing()){
+            btnStatus.setText(R.string.button_stop_race);
+            btnStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    stopRace();
+                }
+            });
+        }else{
+            btnStatus.setText(R.string.button_start_race);
+            btnStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startRace();
+                }
+            });
+        }
     }
 
     public void saveRace(){
@@ -83,9 +114,26 @@ public class MyRacesDetailFragment extends Fragment {
         myRacesListFragment.setSeletectRaceName(selectedRace.getName());
     }
 
-    //TODO
     public void startRace(){
-        System.out.println("start race");
+        Request request = new Request(RequestMethod.PUT, "races/"+selectedRace.getId()+"/start", null, null);
+        new RequestTask(this, "start").execute(request);
+    }
+
+    public void startRaceFinish(){
+        Button btnStatus = (Button)getActivity().findViewById(R.id.button_status);
+        btnStatus.setText(R.string.button_stop_race);
+        selectedRace.setStartDate();
+    }
+
+    public void stopRace(){
+        Request request = new Request(RequestMethod.PUT, "races/"+selectedRace.getId()+"/end", null, null);
+        new RequestTask(this, "stop").execute(request);
+    }
+
+    public void stopRaceFinish(){
+        System.out.println("bloop");
+        Button btnStatus = (Button)getActivity().findViewById(R.id.button_status);
+        selectedRace.setEndDate();
     }
 
     //TODO think wheter I should use 'remove' or 'delete'
