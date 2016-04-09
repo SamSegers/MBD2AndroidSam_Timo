@@ -28,7 +28,7 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
 
     private ArrayList<User> users;
     private View rootView;
-    private UserListAdapter adapter;
+    private RaceUsersListAdapter adapter;
 
     public RacesUsersListFragment() {
     }
@@ -49,15 +49,17 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
                 ArrayList<Race> races = new ArrayList<>();
                 for (int j=0; j<jsonRaces.length(); j++) {
                     JSONObject jsonRace = jsonRaces.getJSONObject(j);
+
                     JSONArray jsonPubs = jsonRace.getJSONArray("tagged");
                     ArrayList<Pub> pubs = new ArrayList<>();
-                    for(int k=0;k<jsonPubs.length();k++){
-                        pubs.add(new Pub(jsonPubs.getString(k), null, null));
-                        /*JSONObject jsonPub = jsonPubs.getJSONObject(k);
-                        pubs.add(new Pub(jsonPub.getString("id"), jsonPub.getString("name"), null));*/
-                        //races.add(new Race(jsonRace.getString("id"), jsonRace.getString("name"), null, null, null));
-                    }
-                    races.add(new Race(jsonRace.getString("id"), null/*jsonRace.getString("name")*/, pubs, null, null));
+                    for(int k=0;k<jsonPubs.length();k++)
+                        pubs.add(new Pub(jsonPubs.getString(k), null, true, null));
+
+                    String id = Util.getJsonString(jsonRace, "id");
+                    String name = Util.getJsonString(jsonRace, "name");
+                    String startDate = Util.getJsonString(jsonRace, "startDate");
+                    String endDate = Util.getJsonString(jsonRace, "endDate");
+                    races.add(new Race(id, name, pubs, startDate, endDate));
                 }
                 users.add(new User(jsonUser.getString("_id"), jsonUser.getString("username"), races));
             }
@@ -88,7 +90,7 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
         ListView listView = (ListView) rootView.findViewById(R.id.list_races_users);
         registerForContextMenu(listView);
         users = new ArrayList<>();
-        adapter = new UserListAdapter(getActivity(), users);
+        adapter = new RaceUsersListAdapter(getActivity(), users);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 

@@ -44,10 +44,10 @@ public class MyRacesPubsListAdapter extends ArrayAdapter<Pub> {
         txtLabel.setText(items.get(position).getName());
 
         CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.item_checkbox);
-        checkBox.setEnabled(race!=null);
+        checkBox.setEnabled(race!=null && race.isEditable());
 
         if(race!=null){
-            ArrayList<Pub> waypoints = race.getWaypoints();
+            ArrayList<Pub> waypoints = race.getPubs();
             if(waypoints!=null){
                 for(int i=0;i<waypoints.size();i++){
                     if(waypoints.get(i).getId().equals(items.get(position).getId())){

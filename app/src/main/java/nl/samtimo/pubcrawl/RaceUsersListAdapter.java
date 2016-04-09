@@ -13,14 +13,14 @@ import java.util.ArrayList;
 /**
  * Created by admin on 31-03-16.
  */
-public class UserListAdapter extends ArrayAdapter<User> {
+public class RaceUsersListAdapter extends ArrayAdapter<User> {
 
     private final Activity context;
     private final ArrayList<User> items;
 
     private Race currentRace;
 
-    public UserListAdapter(Activity context, ArrayList<User> items) {
+    public RaceUsersListAdapter(Activity context, ArrayList<User> items) {
         super(context, R.layout.list_item_user, items);
 
         this.context = context;
@@ -45,13 +45,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
             TextView txtCount = (TextView) rowView.findViewById(R.id.item_count);
             txtCount.setText(count);
         }
-
-        /*ArrayList<Pub> waypoints = items.get(position).getWaypoints();
-
-        if(waypoints!=null){
-            TextView txtCount = (TextView) rowView.findViewById(R.id.item_count);
-            txtCount.setText(waypoints.size());
-        }*/
 
         return rowView;
     };

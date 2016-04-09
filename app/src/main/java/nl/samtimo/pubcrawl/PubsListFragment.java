@@ -46,8 +46,7 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
             JSONArray results = object.getJSONArray("results");
             for (int i=0; i<results.length(); i++) {
                 JSONObject result = results.getJSONObject(i);
-                pubs.add(new Pub(result.getString("place_id"), result.getString("name"), result.getString("icon")));
-                System.out.println(result.getString("id"));
+                pubs.add(new Pub(result.getString("place_id"), result.getString("name"), false, result.getString("icon")));
             }
         }catch(Exception ex){
             ex.printStackTrace();

@@ -28,16 +28,26 @@ public class User {
         return races;
     }
 
+    public boolean isParticipating(Race race){
+        for(int i=0;i<races.size();i++){
+            if(races.get(i).getId().equals(race.getId())) return true;
+        }
+        return false;
+        //return races.contains(race);
+    }
+
     public int getTagCount(Race race){
-        for(int i=0;i<races.size();i++)
-           if(races.get(i).getId().equals(race.getId())) return races.get(i).getWaypoints().size();
+        for(int i=0;i<races.size();i++){
+            Race currentRace = races.get(i);
+            if(currentRace.getId().equals(race.getId())) return currentRace.getTagCount();
+        }
         return 0;
     }
 
     public ArrayList<Pub> getTags(Race race){
         for(int i=0;i<races.size();i++){
             if(races.get(i).getId().equals(race.getId())){
-                return races.get(i).getWaypoints();
+                return races.get(i).getPubs();
             }
         }
         return null;
@@ -46,14 +56,14 @@ public class User {
     public void addTag(Race race, Pub pub){
         for(int i=0;i<races.size();i++){
             Race curRace = races.get(i);
-            if(curRace.getId().equals(race.getId())) curRace.setWaypoint(pub, true);
+            if(curRace.getId().equals(race.getId())) curRace.setPub(pub, true);
         }
     }
 
     public void removeTag(Race race, Pub pub){
         for(int i=0;i<races.size();i++){
             Race curRace = races.get(i);
-            if(curRace.getId().equals(race.getId())) curRace.setWaypoint(pub, false);
+            if(curRace.getId().equals(race.getId())) curRace.setPub(pub, false);
         }
     }
 }

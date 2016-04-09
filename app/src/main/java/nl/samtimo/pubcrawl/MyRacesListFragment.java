@@ -1,15 +1,12 @@
 package nl.samtimo.pubcrawl;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -18,7 +15,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 
 /**
@@ -33,7 +29,7 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
 
     private ArrayList<Race> races;
     private View rootView;
-    private RaceListAdapter adapter;
+    private RacesListAdapter adapter;
     private String newName;
     private Race selectedRace;
 
@@ -60,13 +56,12 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
             for (int i=0; i<racesArr.length(); i++) {
                 JSONObject jRace = racesArr.getJSONObject(i);
                 ArrayList<Pub> waypoints = new ArrayList<>();
-                System.out.println(jRace.toString());
                 if(jRace.has("pubs")){
                     JSONArray waypointsArr = jRace.getJSONArray("pubs");
                     for(int j=0;j<waypointsArr.length();j++){
                         JSONObject waypoint = waypointsArr.optJSONObject(j);
                         if(waypoint!=null && waypoint.has("id") && waypoint.has("name"))
-                            waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));
+                            waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), false, null));
                     }
                 }
 
@@ -103,8 +98,8 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
 
     public void addRaceFinish(String result){
         try{
-            JSONObject object = new JSONObject(result);
-            adapter.add(new Race(object.getString("_id"), newName, null, null, null));
+            JSONObject jsonRace = new JSONObject(result);
+            adapter.add(new Race(jsonRace.getString("_id"), newName));
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -124,7 +119,7 @@ public class MyRacesListFragment extends Fragment implements AdapterView.OnItemC
         // register ListView so I can use it with the context menu
         registerForContextMenu(listView);
         // create adapter, parameters: activity, layout of individual items, array of values
-        adapter = new RaceListAdapter(getActivity(), races);
+        adapter = new RacesListAdapter(getActivity(), races);
         // set the adapter to the ListView
         listView.setAdapter(adapter);
         // add actionlistener

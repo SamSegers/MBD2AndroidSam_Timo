@@ -85,7 +85,7 @@ public class MyRacesPubsListFragment extends Fragment  implements AdapterView.On
             JSONArray pubsArr = pubsObj.getJSONArray("pub");
             for (int i=0; i<pubsArr.length(); i++) {
                 JSONObject pub = pubsArr.getJSONObject(i);
-                if(pub.has("id") && pub.has("name")) pubs.add(new Pub(pub.getString("id"), pub.getString("name"), null));
+                if(pub.has("id") && pub.has("name")) pubs.add(new Pub(pub.getString("id"), pub.getString("name"), false, null));
             }
             adapter.notifyDataSetChanged();
         }catch(Exception ex){

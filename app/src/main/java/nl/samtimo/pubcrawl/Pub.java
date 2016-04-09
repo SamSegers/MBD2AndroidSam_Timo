@@ -17,11 +17,13 @@ public class Pub {
     private String id;
     private String name;
     private String imageURL;
+    private boolean tagged;
     //private Bitmap image;
 
-    public Pub(String id, String name, String imageURL){
+    public Pub(String id, String name, boolean tagged, String imageURL){
         this.id = id;
         this.name = name;
+        this.tagged = tagged;
         this.imageURL = imageURL;
     }
 
@@ -31,6 +33,15 @@ public class Pub {
 
     public String getName(){
         return name;
+    }
+
+    public void setTagged(boolean tagged){
+        this.tagged = tagged;
+    }
+
+    public boolean isTagged(){
+        System.out.println("isTagged "+tagged);
+        return tagged;
     }
 
     public void initImage(ImageView imageView){

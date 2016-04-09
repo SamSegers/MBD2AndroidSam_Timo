@@ -1,7 +1,6 @@
 package nl.samtimo.pubcrawl;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,7 +27,7 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
 
     private ArrayList<Race> races;
     private View rootView;
-    private RaceListAdapter adapter;
+    private RacesListAdapter adapter;
 
     public RacesListFragment() {
         races = new ArrayList<>();
@@ -44,19 +43,24 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
 
     public void loadRaces(String json){
         try{
-            JSONArray racesArr = new JSONArray(json);
-            for (int i=0; i<racesArr.length(); i++) {
-                JSONObject race = racesArr.getJSONObject(i);
+            JSONArray jRaces = new JSONArray(json);
+            for (int i=0; i<jRaces.length(); i++) {
+                JSONObject jRace = jRaces.getJSONObject(i);
                 ArrayList<Pub> waypoints = new ArrayList<>();
-                if(race.has("pubs")){
-                    JSONArray waypointsArr = race.getJSONArray("pubs");
-                    for(int j=0;j<waypointsArr.length();j++){
-                        JSONObject waypoint = waypointsArr.optJSONObject(j);
-                        if(waypoint!=null && waypoint.has("id") && waypoint.has("name"))
-                            waypoints.add(new Pub(waypoint.getString("id"), waypoint.getString("name"), null));
+                if(jRace.has("pubs")){
+                    JSONArray jPubs = jRace.getJSONArray("pubs");
+                    for(int j=0;j<jPubs.length();j++){
+                        JSONObject jPub = jPubs.optJSONObject(j);
+                        if(jPub!=null && jPub.has("id") && jPub.has("name"))
+                            waypoints.add(new Pub(jPub.getString("id"), jPub.getString("name"), false, null));
                     }
                 }
-                races.add(new Race(race.getString("_id"), race.getString("name"), waypoints, null, null));
+
+                String id = Util.getJsonString(jRace, "_id");
+                String name = Util.getJsonString(jRace, "name");
+                String startDate = Util.getJsonString(jRace, "startDate");
+                String endDate = Util.getJsonString(jRace, "endDate");
+                races.add(new Race(id, name, waypoints, startDate, endDate));
             }
             adapter.notifyDataSetChanged();
         }catch(Exception ex){
@@ -73,7 +77,7 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
         // register ListView so I can use it with the context menu
         registerForContextMenu(listView);
         // create adapter, parameters: activity, layout of individual items, array of values
-        adapter = new RaceListAdapter(getActivity(), races);
+        adapter = new RacesListAdapter(getActivity(), races);
         // set the adapter to the ListView
         listView.setAdapter(adapter);
         // add actionlistener
@@ -100,7 +104,7 @@ public class RacesListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Race item = (Race)((ListView)parent).getItemAtPosition(position);
+        Race item = (Race) parent.getItemAtPosition(position);
         //TextView o = (TextView)view.findViewById(R.id.list_fruits);
         //o.setBackgroundColor(0xFF00FF00);
         //ListView listView = (ListView) rootView.findViewById(R.id.list_fruits);

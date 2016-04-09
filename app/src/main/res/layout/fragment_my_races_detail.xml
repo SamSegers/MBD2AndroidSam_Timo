@@ -5,6 +5,7 @@
     tools:context="nl.samtimo.pubcrawl.MyRacesDetailFragment">
 
     <RelativeLayout
+        android:layout_margin="@dimen/fragment_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -13,10 +14,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:textSize="40sp"
             android:text="@string/fragment_my_races_detail_placeholder" />
 
         <EditText
             android:id="@+id/edit_name"
+            android:enabled="false"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

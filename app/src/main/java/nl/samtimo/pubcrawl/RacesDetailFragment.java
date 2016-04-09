@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -80,6 +81,7 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
 
         Button btnJoinRace = (Button)getActivity().findViewById(R.id.button_join_race);
         btnJoinRace.setVisibility(View.VISIBLE);
+        btnJoinRace.setEnabled(!selectedRace.isCompleted());
         if(racesUsersListFragment.contains(LoginActivity.user)){
             btnJoinRace.setText(R.string.button_leave_race);
             btnJoinRace.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +126,7 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
     }
 
     public ArrayList<Pub> getWaypoints(){
-        return selectedRace.getWaypoints();
+        return selectedRace.getPubs();
     }
 
     public Race getRace(){
@@ -135,7 +137,7 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
         if(selectedRace!=null){
             try{
                 pubs.clear();
-                ArrayList<Pub> toLoadPubs = selectedRace.getWaypoints();
+                ArrayList<Pub> toLoadPubs = selectedRace.getPubs();
                 for(int i=0;i<toLoadPubs.size();i++)
                     pubs.add(toLoadPubs.get(i));
 

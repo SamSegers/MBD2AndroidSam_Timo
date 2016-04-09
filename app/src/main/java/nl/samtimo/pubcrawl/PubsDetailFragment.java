@@ -94,8 +94,6 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
     public void updateDetails(Pub pub){
         seletedPub = pub;
 
-        System.out.println(pub.getName());
-
         TextView textView = (TextView)getActivity().findViewById(R.id.text_header);
         textView.setText(pub.getName().toString());
 
@@ -107,11 +105,10 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
 
     public void loadInfo(String json){
         try{
+            adapter.clear();
             JSONObject jsonResult = new JSONObject(json).getJSONObject("result");
             if(jsonResult.has("reviews")){
-                System.out.println("has reviews");
                 JSONArray jsonReviews = jsonResult.getJSONArray("reviews");
-                System.out.println("amount of reviews: "+jsonReviews.length());
                 for (int i=0; i<jsonReviews.length(); i++) {
                     JSONObject jsonReview = jsonReviews.getJSONObject(i);
                     if(jsonReview.has("author_name") && jsonReview.has("text")){

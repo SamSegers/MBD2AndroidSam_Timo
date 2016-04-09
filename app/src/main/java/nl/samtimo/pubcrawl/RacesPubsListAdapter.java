@@ -19,6 +19,8 @@ public class RacesPubsListAdapter extends ArrayAdapter<Pub> {
     private final FragmentActivity context;
     private final ArrayList<Pub> items;
 
+    private Race race;
+
     public RacesPubsListAdapter(FragmentActivity context, ArrayList<Pub> items) {
         super(context, R.layout.list_item_pub_selectable, items);
 
@@ -30,29 +32,38 @@ public class RacesPubsListAdapter extends ArrayAdapter<Pub> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.list_item_pub_selectable, null, true);
 
-        TextView txtLabel = (TextView) rowView.findViewById(R.id.item_label);
-        txtLabel.setText(items.get(position).getName());
+        Pub pub = items.get(position);
 
-        CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.item_checkbox);
+        TextView txtLabel = (TextView) rowView.findViewById(R.id.item_label);
+        txtLabel.setText(pub.getName());
+
+        //TODO set race in class
         RacesDetailFragment racesDetailFragment = (RacesDetailFragment)context.getSupportFragmentManager().findFragmentById(R.id.fragment_races_detail);
-        ArrayList<Pub> tags = LoginActivity.user.getTags(racesDetailFragment.getRace());
-        //if(tags!=null) System.out.println("tag count in adapter: "+tags.size());
-        if(tags!=null){
-            for(int i=0;i<tags.size();i++){
-                if(tags.get(i).getId().equals(items.get(position).getId())){
-                    checkBox.setChecked(true);
-                    break;
+        race = racesDetailFragment.getRace();
+
+        if(race!=null){
+            CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.item_checkbox);
+            //System.out.println("race checkboxes: "+LoginActivity.user.isParticipating(race)+" "+!race.isCompleted());
+            checkBox.setEnabled(LoginActivity.user.isParticipating(race) && race.isOngoing());
+
+            ArrayList<Pub> tags = LoginActivity.user.getTags(race);
+            if(tags!=null){
+                for(int i=0;i<tags.size();i++){
+                    if(tags.get(i).getId().equals(pub.getId())){
+                        checkBox.setChecked(true);
+                        break;
+                    }
                 }
             }
-        }
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                RacesDetailFragment racesDetailFragment = (RacesDetailFragment) context.getSupportFragmentManager().findFragmentById(R.id.fragment_races_detail);
-                racesDetailFragment.updateTag(items.get(position), isChecked);
-            }
-        });
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    RacesDetailFragment racesDetailFragment = (RacesDetailFragment) context.getSupportFragmentManager().findFragmentById(R.id.fragment_races_detail);
+                    racesDetailFragment.updateTag(items.get(position), isChecked);
+                }
+            });
+        }
 
         return rowView;
     };

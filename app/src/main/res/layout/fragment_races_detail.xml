@@ -6,6 +6,7 @@
 
     <LinearLayout
         android:orientation="vertical"
+        android:layout_margin="@dimen/fragment_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,8 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/fragment_pubs_detail_placeholder"
-            android:textSize="20sp"/>
+            android:text="@string/fragment_races_detail_placeholder"
+            android:textSize="40sp"/>
 
         <Button
             android:id="@+id/button_join_race"

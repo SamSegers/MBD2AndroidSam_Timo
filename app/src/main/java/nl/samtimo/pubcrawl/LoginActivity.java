@@ -117,12 +117,16 @@ public class LoginActivity extends AppCompatActivity {
                 ArrayList<Race> races = new ArrayList<>();
                 for (int i=0; i<jsonRaces.length(); i++) {
                     JSONObject jsonRace = jsonRaces.getJSONObject(i);
+
                     JSONArray jsonPubs = jsonRace.getJSONArray("tagged");
                     ArrayList<Pub> pubs = new ArrayList<>();
-                    for(int j=0;j<jsonPubs.length();j++){
-                        pubs.add(new Pub(jsonPubs.getString(j), null, null));
-                    }
-                    races.add(new Race(jsonRace.getString("id"), /*jsonRace.getString("name")*/null, pubs, null, null));
+                    for(int j=0;j<jsonPubs.length();j++) pubs.add(new Pub(jsonPubs.getString(j), null, true, null));
+
+                    String id = Util.getJsonString(jsonRace, "id");
+                    String name = Util.getJsonString(jsonRace, "name");
+                    String startDate = Util.getJsonString(jsonRace, "startDate");
+                    String endDate = Util.getJsonString(jsonRace, "endDate");
+                    races.add(new Race(id, name, pubs, startDate, endDate));
                 }
                 user = new User(jsonUser.getString("_id"), jsonUser.getString("username"), races);
                 Intent intent = new Intent(this, MenuActivity.class);

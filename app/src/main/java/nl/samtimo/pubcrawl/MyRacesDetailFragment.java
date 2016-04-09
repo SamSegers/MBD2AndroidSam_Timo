@@ -42,17 +42,15 @@ public class MyRacesDetailFragment extends Fragment {
     public void updateDetails(Race race){
         selectedRace = race;
 
-        if(selectedRace.isCompleted()){
-            getActivity().findViewById(R.id.button_save).setEnabled(false);
-            getActivity().findViewById(R.id.button_status).setEnabled(false);
-            getActivity().findViewById(R.id.list_my_races).setEnabled(false);
-        }
-        getActivity().findViewById(R.id.button_remove).setEnabled(true);
+        getActivity().findViewById(R.id.button_save).setEnabled(selectedRace.isEditable());
+        getActivity().findViewById(R.id.button_status).setEnabled(!selectedRace.isCompleted());
+        getActivity().findViewById(R.id.button_remove).setEnabled(!selectedRace.isOngoing());
 
         TextView textHeader = (TextView)getActivity().findViewById(R.id.text_header);
         textHeader.setText(race.getName());
         EditText editName = (EditText)getActivity().findViewById(R.id.edit_name);
         editName.setText(race.getName());
+        editName.setEnabled(true);
 
         updateStatusButton();
     }
@@ -81,13 +79,12 @@ public class MyRacesDetailFragment extends Fragment {
     }
 
     public void saveRace(){
-        System.out.println(selectedRace.getId());
         EditText editName = (EditText)getActivity().findViewById(R.id.edit_name);
         String requestRoute = "races/"+selectedRace.getId()+"/update";
 
         //TODO find something better for this
         String requestBody = "{ \"name\": \""+editName.getText()+"\", \"pubs\": [";
-        ArrayList<Pub> waypoints = selectedRace.getWaypoints();
+        ArrayList<Pub> waypoints = selectedRace.getPubs();
         if(waypoints!=null) {
             boolean first = true;
             for (int i = 0; i < waypoints.size(); i++) {
@@ -98,7 +95,6 @@ public class MyRacesDetailFragment extends Fragment {
         }
         requestBody += "]}";
 
-        System.out.println(requestBody);
         Request request = new Request(RequestMethod.PUT, requestRoute, requestBody, null);
         new RequestTask(this, "save").execute(request);
     }
@@ -131,7 +127,6 @@ public class MyRacesDetailFragment extends Fragment {
     }
 
     public void stopRaceFinish(){
-        System.out.println("bloop");
         Button btnStatus = (Button)getActivity().findViewById(R.id.button_status);
         selectedRace.setEndDate();
     }
@@ -148,11 +143,11 @@ public class MyRacesDetailFragment extends Fragment {
     }
 
     public void updatePub(Pub pub, boolean inRace){
-        if(selectedRace!=null) selectedRace.setWaypoint(pub, inRace);
+        if(selectedRace!=null) selectedRace.setPub(pub, inRace);
     }
 
     public ArrayList<Pub> getWaypoints(){
-        return selectedRace!=null?selectedRace.getWaypoints():null;
+        return selectedRace!=null?selectedRace.getPubs():null;
     }
 
     @Override
