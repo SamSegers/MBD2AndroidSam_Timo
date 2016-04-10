@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class PubsActivity extends FragmentActivity implements PubsListFragment.OnFragmentInteractionListener, PubsDetailFragment.OnFragmentInteractionListener {
+public class PubsActivity extends FragmentColorActivity implements PubsListFragment.OnFragmentInteractionListener, PubsDetailFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onStart(){

@@ -2,7 +2,6 @@ package nl.samtimo.pubcrawl;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -16,7 +15,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatColorActivity {
     // UI references.
     private TextInputEditText mUsernameView;
     private TextInputEditText mPasswordView;

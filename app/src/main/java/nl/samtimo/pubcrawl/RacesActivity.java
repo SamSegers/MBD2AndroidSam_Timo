@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class RacesActivity extends FragmentActivity implements RacesListFragment.OnFragmentInteractionListener, RacesDetailFragment.OnFragmentInteractionListener, RacesUsersListFragment.OnFragmentInteractionListener{
+public class RacesActivity extends FragmentColorActivity implements RacesListFragment.OnFragmentInteractionListener, RacesDetailFragment.OnFragmentInteractionListener, RacesUsersListFragment.OnFragmentInteractionListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

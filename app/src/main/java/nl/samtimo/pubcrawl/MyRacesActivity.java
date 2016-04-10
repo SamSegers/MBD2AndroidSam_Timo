@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MyRacesActivity extends FragmentActivity implements MyRacesListFragment.OnFragmentInteractionListener, MyRacesPubsListFragment.OnFragmentInteractionListener, MyRacesDetailFragment.OnFragmentInteractionListener{
+public class MyRacesActivity extends FragmentColorActivity implements MyRacesListFragment.OnFragmentInteractionListener, MyRacesPubsListFragment.OnFragmentInteractionListener, MyRacesDetailFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
