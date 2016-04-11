@@ -30,8 +30,7 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
     private View rootView;
     private RaceUsersListAdapter adapter;
 
-    public RacesUsersListFragment() {
-    }
+    public RacesUsersListFragment() {}
 
     public void loadUsers(Race race){
         adapter.setRace(race);
@@ -61,7 +60,7 @@ public class RacesUsersListFragment extends Fragment implements AdapterView.OnIt
                     String endDate = Util.getJsonString(jsonRace, "endDate");
                     races.add(new Race(id, name, pubs, startDate, endDate));
                 }
-                users.add(new User(jsonUser.getString("_id"), jsonUser.getString("username"), races));
+                users.add(new Participant(jsonUser.getString("_id"), jsonUser.getString("username"), races));
             }
             adapter.notifyDataSetChanged();
 

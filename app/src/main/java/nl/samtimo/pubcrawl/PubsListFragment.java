@@ -1,7 +1,6 @@
 package nl.samtimo.pubcrawl;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,16 +25,20 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Pub> pubs;
-    private PubListAdapter adapter;
+    private PubsListAdapter adapter;
 
-    public PubsListFragment() {
-        pubs = new ArrayList<>();
-    }
+    public PubsListFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        pubs = new ArrayList<>();
+
+        reloadPubs();
+    }
+
+    public void reloadPubs(){
         Request request = new Request(RequestMethod.GET, "pubs", null, null);
         new RequestTask(this).execute(request);
     }
@@ -63,7 +66,7 @@ public class PubsListFragment extends Fragment implements AdapterView.OnItemClic
         // register ListView so I can use it with the context menu
         registerForContextMenu(listView);
         // create adapter, parameters: activity, layout of individual items, array of values
-        adapter = new PubListAdapter(getActivity(), pubs);
+        adapter = new PubsListAdapter(getActivity(), pubs);
         // set the adapter to the ListView
         listView.setAdapter(adapter);
         // add actionlistener

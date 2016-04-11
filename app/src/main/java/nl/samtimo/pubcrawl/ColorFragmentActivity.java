@@ -9,7 +9,8 @@ import android.support.v4.app.FragmentActivity;
 /**
  * Created by admin on 10-04-16.
  */
-public class FragmentColorActivity extends FragmentActivity implements ColorActivity{
+public class ColorFragmentActivity extends FragmentActivity implements ColorActivity{
+    private String currentBackgroundColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +25,11 @@ public class FragmentColorActivity extends FragmentActivity implements ColorActi
     }
 
     public void updateBackgroundColor(){
-        //setting background
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String backgroundColor = preferences.getString("background", "#ffffff");
-        getWindow().getDecorView().setBackgroundColor(Color.parseColor(backgroundColor));
+        if(currentBackgroundColor!=backgroundColor){
+            getWindow().getDecorView().setBackgroundColor(Color.parseColor(backgroundColor));
+            currentBackgroundColor = backgroundColor;
+        }
     }
 }

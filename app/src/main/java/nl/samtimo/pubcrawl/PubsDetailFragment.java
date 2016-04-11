@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
@@ -28,19 +29,21 @@ import java.util.ArrayList;
 public class PubsDetailFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private OnFragmentInteractionListener mListener;
-
+    private PubsListFragment pubsListFragment;
     private Pub seletedPub;
-
     private ArrayList<Review> reviews;
     private PubReviewListAdapter adapter;
 
     public PubsDetailFragment() {
-        reviews = new ArrayList<>();
+        // required empty constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        reviews = new ArrayList<>();
+        pubsListFragment = (PubsListFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_pubs_search);
     }
 
     @Override
@@ -82,13 +85,29 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     public void addPub(){
-        Request request = new Request(RequestMethod.PUT, "users/pubs/"+seletedPub.getId()+"/name/"+seletedPub.getName().replaceAll(" ", "_"), null, null);
+        String name = URLEncoder.encode(seletedPub.getName());
+        Request request = new Request(RequestMethod.PUT, "users/pubs/"+seletedPub.getId()+"/name/"+name, null, null);
         new RequestTask(this, "add").execute(request);
     }
 
-    //TODO
     public void addPubFinish(String json){
-        System.out.println("pubs detail fragment");
+        LoginActivity.user.addPub(seletedPub);
+        Button btnUpdate = (Button)getActivity().findViewById(R.id.button_pub_update);
+        btnUpdate.setText(R.string.button_collection_remove);
+        pubsListFragment.reloadPubs();
+    }
+
+    public void removePub(){
+        Request request = new Request(RequestMethod.DELETE, "users/pubs/"+seletedPub.getId(), null, null);
+        new RequestTask(this, "remove").execute(request);
+    }
+
+    public void removePubFinish(){
+        System.out.println("removePubFinish");
+        LoginActivity.user.removePub(seletedPub);
+        Button btnUpdate = (Button)getActivity().findViewById(R.id.button_pub_update);
+        btnUpdate.setText(R.string.button_collection_add);
+        pubsListFragment.reloadPubs();
     }
 
     public void updateDetails(Pub pub){
@@ -97,10 +116,20 @@ public class PubsDetailFragment extends Fragment implements AdapterView.OnItemCl
         TextView textView = (TextView)getActivity().findViewById(R.id.text_header);
         textView.setText(pub.getName().toString());
 
+        Button btnUpdate = (Button)getActivity().findViewById(R.id.button_pub_update);
+
+        if(LoginActivity.user.isInCollection(pub)) btnUpdate.setText(R.string.button_collection_remove);
+        else btnUpdate.setText(R.string.button_collection_add);
+
         Request request = new Request(RequestMethod.GET, "pubs/"+pub.getId(), null, null);
         new RequestTask(this, "info").execute(request);
 
-        getActivity().findViewById(R.id.button_add).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.button_pub_update).setVisibility(View.VISIBLE);
+    }
+
+    public void updateStatus(){
+        if(!LoginActivity.user.isInCollection(seletedPub)) addPub();
+        else removePub();
     }
 
     public void loadInfo(String json){

@@ -33,8 +33,10 @@ public class RacesListAdapter extends ArrayAdapter<Race> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.list_item_race, null, true);
 
-        if(race.isOngoing()) rowView.setBackgroundColor(Color.parseColor("#FFFAAD"));
-        else if(race.isCompleted()) rowView.setBackgroundColor(Color.GRAY);
+        rowView.setBackgroundColor(
+            race.isOngoing()?Color.parseColor("#FFFAAD"):
+            race.isCompleted()?Color.GRAY:Color.parseColor("#FFFFF2")
+        );
 
         TextView txtLabel = (TextView) rowView.findViewById(R.id.item_label);
         txtLabel.setText(race.getName());

@@ -29,20 +29,19 @@ import java.util.ArrayList;
 public class RacesDetailFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
-
     private ArrayList<Pub> pubs;
     private RacesPubsListAdapter adapter;
-
     private Pub selectedPub;
     private Race selectedRace;
 
     public RacesDetailFragment() {
-        pubs = new ArrayList<>();
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        pubs = new ArrayList<>();
+
         super.onCreate(savedInstanceState);
     }
 
@@ -77,8 +76,7 @@ public class RacesDetailFragment extends Fragment implements AdapterView.OnItemC
     }
 
     public void updateJoinButton(){
-        RacesUsersListFragment racesUsersListFragment = (RacesUsersListFragment)getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_races_users_list);
-
+        RacesUsersListFragment racesUsersListFragment = (RacesUsersListFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_races_users_list);
         Button btnJoinRace = (Button)getActivity().findViewById(R.id.button_join_race);
         btnJoinRace.setVisibility(View.VISIBLE);
         btnJoinRace.setEnabled(!selectedRace.isCompleted());

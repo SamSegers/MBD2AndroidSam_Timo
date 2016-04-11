@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by admin on 10-04-16.
  */
-public class AppCompatColorActivity extends AppCompatActivity implements ColorActivity{
+public class ColorAppCompatActivity extends AppCompatActivity implements ColorActivity{
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);

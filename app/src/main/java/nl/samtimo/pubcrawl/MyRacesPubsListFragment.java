@@ -13,6 +13,7 @@ import android.widget.ListView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 
@@ -85,7 +86,10 @@ public class MyRacesPubsListFragment extends Fragment  implements AdapterView.On
             JSONArray pubsArr = pubsObj.getJSONArray("pub");
             for (int i=0; i<pubsArr.length(); i++) {
                 JSONObject pub = pubsArr.getJSONObject(i);
-                if(pub.has("id") && pub.has("name")) pubs.add(new Pub(pub.getString("id"), pub.getString("name"), false, null));
+                if(pub.has("id") && pub.has("name")){
+                    String name = URLDecoder.decode(pub.getString("name"));
+                    pubs.add(new Pub(pub.getString("id"), name, false, null));
+                }
             }
             adapter.notifyDataSetChanged();
         }catch(Exception ex){

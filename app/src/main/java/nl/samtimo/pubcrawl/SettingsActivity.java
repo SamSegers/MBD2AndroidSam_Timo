@@ -10,7 +10,9 @@ import android.widget.Button;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
-public class SettingsActivity extends AppCompatColorActivity {
+public class SettingsActivity extends ColorAppCompatActivity {
+    private static final String DEFAULT_BACKGROUND_COLOR = "#FFFFF2";
+
     private String backgroundColor;
 
     @Override
@@ -32,6 +34,14 @@ public class SettingsActivity extends AppCompatColorActivity {
             @Override
             public void onClick(View view) {
                 save();
+            }
+        });
+
+        Button btnDefaults = (Button) findViewById(R.id.button_defaults);
+        btnDefaults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetDefaults();
             }
         });
     }
@@ -68,5 +78,12 @@ public class SettingsActivity extends AppCompatColorActivity {
         editor.putString("background", backgroundColor);
         editor.apply();
         getWindow().getDecorView().setBackgroundColor(Color.parseColor(backgroundColor));
+    }
+
+    private void resetDefaults(){
+        backgroundColor = DEFAULT_BACKGROUND_COLOR;
+
+        View pvBackground = findViewById(R.id.preview_background);
+        pvBackground.setBackgroundColor(Color.parseColor(backgroundColor));
     }
 }

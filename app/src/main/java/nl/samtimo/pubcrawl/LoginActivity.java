@@ -15,12 +15,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class LoginActivity extends AppCompatColorActivity {
+public class LoginActivity extends ColorAppCompatActivity {
     // UI references.
     private TextInputEditText mUsernameView;
     private TextInputEditText mPasswordView;
 
-    public static User user;
+    public static CurrentUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatColorActivity {
                     String endDate = Util.getJsonString(jsonRace, "endDate");
                     races.add(new Race(id, name, pubs, startDate, endDate));
                 }
-                user = new User(jsonUser.getString("_id"), jsonUser.getString("username"), races);
+                user = new CurrentUser(jsonUser.getString("_id"), jsonUser.getString("username"), races);
                 Intent intent = new Intent(this, MenuActivity.class);
                 startActivity(intent);
             }

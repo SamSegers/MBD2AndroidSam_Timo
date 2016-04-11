@@ -56,4 +56,12 @@ public class Pub {
             e.printStackTrace();
         }*/
     }
+
+    /*public void putInCollection(boolean inCollection){
+        this.inCollection = inCollection;
+    }
+
+    public boolean isInCollection(){
+        return inCollection;
+    }*/
 }

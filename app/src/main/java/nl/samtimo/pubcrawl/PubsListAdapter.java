@@ -1,6 +1,7 @@
 package nl.samtimo.pubcrawl;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 /**
  * Created by admin on 31-03-16.
  */
-public class PubListAdapter extends ArrayAdapter<Pub> {
+public class PubsListAdapter extends ArrayAdapter<Pub> {
 
     private final Activity context;
     private final ArrayList<Pub> items;
 
-    public PubListAdapter(Activity context, ArrayList<Pub> items) {
+    public PubsListAdapter(Activity context, ArrayList<Pub> items) {
         super(context, R.layout.list_item_pub, items);
 
         this.context = context;
@@ -30,14 +31,15 @@ public class PubListAdapter extends ArrayAdapter<Pub> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.list_item_pub, null, true);
 
-        /*CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.item_checkbox);
-        checkBox.setEnabled(false);*/
+        Pub pub = items.get(position);
+
+        if(LoginActivity.user.isInCollection(pub)) rowView.setBackgroundColor(Color.parseColor("#9AE6E4"));
 
         TextView txtLabel = (TextView) rowView.findViewById(R.id.item_label);
-        txtLabel.setText(items.get(position).getName());
+        txtLabel.setText(pub.getName());
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.item_icon);
-        items.get(position).initImage(imageView);
+        pub.initImage(imageView);
 
         return rowView;
     };

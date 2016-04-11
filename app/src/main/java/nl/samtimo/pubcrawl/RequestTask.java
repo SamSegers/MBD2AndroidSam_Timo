@@ -28,6 +28,7 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     private String callback;
     private Fragment fragment;
     private Activity activity;
+    private CurrentUser currentUser;
 
     public RequestTask(Activity activity){
         this.activity = activity;
@@ -45,6 +46,10 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
     public RequestTask(Fragment fragment, String callback){
         this.fragment = fragment;
         this.callback = callback;
+    }
+
+    public RequestTask(CurrentUser currentUser){
+        this.currentUser = currentUser;
     }
 
     protected String doInBackground(Request... requests) {
@@ -142,42 +147,73 @@ public class RequestTask extends AsyncTask<Request, Integer, String> {
                 if(activity instanceof LoginActivity) ((LoginActivity)activity).login(result);
                 else if(activity instanceof SignUpActivity) ((SignUpActivity)activity).signUp(result);
                 else if(activity instanceof MenuActivity) ((MenuActivity)activity).logoutFinish();
-            }else if(fragment!=null){
-                if(fragment instanceof RacesListFragment) ((RacesListFragment)fragment).loadRaces(result);
-                else if(fragment instanceof PubsListFragment) ((PubsListFragment)fragment).loadPubs(result);
-                else if(fragment instanceof PubsDetailFragment){
-                    PubsDetailFragment pubsDetailFragment = (PubsDetailFragment)fragment;
-                    switch(callback){
-                        case "add": pubsDetailFragment.addPubFinish(result); break;
-                        case "info": pubsDetailFragment.loadInfo(result); break;
+            }else if(fragment!=null) {
+                if (fragment instanceof RacesListFragment)
+                    ((RacesListFragment) fragment).loadRaces(result);
+                else if (fragment instanceof PubsListFragment)
+                    ((PubsListFragment) fragment).loadPubs(result);
+                else if (fragment instanceof PubsDetailFragment) {
+                    PubsDetailFragment pubsDetailFragment = (PubsDetailFragment) fragment;
+                    switch (callback) {
+                        case "add":
+                            pubsDetailFragment.addPubFinish(result);
+                            break;
+                        case "remove":
+                            pubsDetailFragment.removePubFinish();
+                            break;
+                        case "info":
+                            pubsDetailFragment.loadInfo(result);
+                            break;
+                    }
+                } else if (fragment instanceof MyRacesPubsListFragment)
+                    ((MyRacesPubsListFragment) fragment).loadPubs(result);
+                else if (fragment instanceof RacesUsersListFragment)
+                    ((RacesUsersListFragment) fragment).loadUsersFinish(result);
+                else if (fragment instanceof MyRacesListFragment) {
+                    MyRacesListFragment myRacesListFragment = (MyRacesListFragment) fragment;
+                    switch (callback) {
+                        case "add":
+                            myRacesListFragment.addRaceFinish(result);
+                            break;
+                        case "load":
+                            myRacesListFragment.loadRaces(result);
+                            break;
+                    }
+                } else if (fragment instanceof MyRacesDetailFragment) {
+                    MyRacesDetailFragment myRacesDetailFragment = (MyRacesDetailFragment) fragment;
+                    switch (callback) {
+                        case "remove":
+                            myRacesDetailFragment.removeRaceFinish();
+                            break;
+                        case "save":
+                            myRacesDetailFragment.saveRaceFinish();
+                            break;
+                        case "start":
+                            myRacesDetailFragment.startRaceFinish();
+                            break;
+                        case "stop":
+                            myRacesDetailFragment.stopRaceFinish();
+                            break;
+                    }
+                } else if (fragment instanceof RacesDetailFragment) {
+                    RacesDetailFragment racesDetailFragment = (RacesDetailFragment) fragment;
+                    switch (callback) {
+                        case "join":
+                            racesDetailFragment.joinRaceFinish();
+                            break;
+                        case "leave":
+                            racesDetailFragment.leaveRaceFinish();
+                            break;
+                        case "tag":
+                            racesDetailFragment.updateTagFinish(result);
+                            break;
+                        case "untag":
+                            racesDetailFragment.updateUntagFinish(result);
+                            break;
                     }
                 }
-                else if(fragment instanceof MyRacesPubsListFragment) ((MyRacesPubsListFragment)fragment).loadPubs(result);
-                else if(fragment instanceof RacesUsersListFragment) ((RacesUsersListFragment)fragment).loadUsersFinish(result);
-                else if(fragment instanceof MyRacesListFragment){
-                    MyRacesListFragment myRacesListFragment = (MyRacesListFragment)fragment;
-                    switch(callback){
-                        case "add": myRacesListFragment.addRaceFinish(result); break;
-                        case "load": myRacesListFragment.loadRaces(result); break;
-                    }
-                }else if(fragment instanceof MyRacesDetailFragment){
-                    MyRacesDetailFragment myRacesDetailFragment = (MyRacesDetailFragment)fragment;
-                    switch(callback){
-                        case "remove": myRacesDetailFragment.removeRaceFinish(); break;
-                        case "save": myRacesDetailFragment.saveRaceFinish(); break;
-                        case "start": myRacesDetailFragment.startRaceFinish(); break;
-                        case "stop": myRacesDetailFragment.stopRaceFinish(); break;
-                    }
-                }else if(fragment instanceof RacesDetailFragment){
-                    RacesDetailFragment racesDetailFragment = (RacesDetailFragment)fragment;
-                    switch (callback){
-                        case "join": racesDetailFragment.joinRaceFinish(); break;
-                        case "leave": racesDetailFragment.leaveRaceFinish(); break;
-                        case "tag": racesDetailFragment.updateTagFinish(result); break;
-                        case "untag": racesDetailFragment.updateUntagFinish(result); break;
-                    }
-                }
-            }//else System.out.println(result);
+            }else if(currentUser!=null) currentUser.initPubs(result);
+            else System.out.println(result);
         }else System.out.println("result is empty");
     }
 }

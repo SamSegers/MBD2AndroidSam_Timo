@@ -1,19 +1,22 @@
 package nl.samtimo.pubcrawl;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
  * Created by admin on 03-04-16.
  */
-public class User {
+public abstract class User {
     private String id;
     private String name;
     private ArrayList<Race> races;
 
-    public User(String id, String name, ArrayList<Race> races){
+    public User(String id, String name, ArrayList<Race> races) {
         this.id = id;
         this.name = name;
-        this.races = races!=null?races:new ArrayList<Race>();
+        this.races = races != null ? races : new ArrayList<Race>();
     }
 
     public String getId(){
