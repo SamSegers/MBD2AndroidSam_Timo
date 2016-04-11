@@ -1,6 +1,8 @@
 package nl.samtimo.pubcrawl.authentication;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,6 +29,8 @@ import nl.samtimo.pubcrawl.ui.ColorAppCompatActivity;
 import nl.samtimo.pubcrawl.users.CurrentUser;
 
 public class LoginActivity extends ColorAppCompatActivity {
+    private TextView authenticationMessage;
+
     // UI references.
     private TextInputEditText mUsernameView;
     private TextInputEditText mPasswordView;
@@ -37,6 +41,8 @@ public class LoginActivity extends ColorAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        authenticationMessage = (TextView)findViewById(R.id.tvAuthentication);
 
         mUsernameView = (TextInputEditText) findViewById(R.id.username);
 
@@ -80,6 +86,15 @@ public class LoginActivity extends ColorAppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        authenticationMessage.setText(R.string.textview_authentication_placeholder);
+        authenticationMessage.setTextColor(Color.BLACK);
+    }
+
     private void attemptLogin() {
         // Reset errors.
         mUsernameView.setError(null);
@@ -93,11 +108,11 @@ public class LoginActivity extends ColorAppCompatActivity {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        /*if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        }*/
+        }
 
         // Check for a valid username.
         if (TextUtils.isEmpty(username)) {
@@ -108,15 +123,15 @@ public class LoginActivity extends ColorAppCompatActivity {
 
         if (cancel) {
             focusView.requestFocus();
+            authenticationMessage.setText(R.string.textview_authentication_failed);
+            authenticationMessage.setTextColor(Color.RED);
         } else {
+            authenticationMessage.setText(R.string.textview_authentication_passed);
+            authenticationMessage.setTextColor(Color.BLACK);
+
             Request request = new Request(RequestMethod.POST, "login", "username="+username+"&password="+password, null);
             new RequestTask(this).execute(request);
         }
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
     public void login(String result){

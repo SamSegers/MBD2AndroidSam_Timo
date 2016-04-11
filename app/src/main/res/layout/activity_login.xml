@@ -53,6 +53,14 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/tvAuthentication"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="@string/textview_authentication_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <Button
                 android:id="@+id/sign_in_button"
                 style="?android:textAppearanceSmall"
