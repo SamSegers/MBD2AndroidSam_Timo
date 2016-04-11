@@ -4,25 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="nl.samtimo.pubcrawl.RacesActivity">
+    tools:context=".races.RacesActivity">
 
     <fragment
         android:id="@+id/fragment_my_races_list"
-        android:name="nl.samtimo.pubcrawl.MyRacesListFragment"
+        android:name="nl.samtimo.pubcrawl.my_races.MyRacesListFragment"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
 
     <fragment
         android:id="@+id/fragment_my_races_detail"
-        android:name="nl.samtimo.pubcrawl.MyRacesDetailFragment"
+        android:name="nl.samtimo.pubcrawl.my_races.MyRacesDetailFragment"
         android:layout_weight="2"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
 
     <fragment
         android:id="@+id/fragment_my_races_pub_list"
-        android:name="nl.samtimo.pubcrawl.MyRacesPubsListFragment"
+        android:name="nl.samtimo.pubcrawl.my_races.MyRacesPubsListFragment"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>

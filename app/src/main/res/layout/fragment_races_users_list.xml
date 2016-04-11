@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.samtimo.pubcrawl.RacesUsersListFragment">
+    tools:context=".races.RacesUsersListFragment">
 
     <ListView
         android:id="@+id/list_races_users"

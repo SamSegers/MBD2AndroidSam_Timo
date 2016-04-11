@@ -1,14 +1,6 @@
 package nl.samtimo.pubcrawl;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.renderscript.ScriptGroup;
 import android.widget.ImageView;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by admin on 02-04-16.

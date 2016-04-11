@@ -7,11 +7,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="nl.samtimo.pubcrawl.MyRacesActivity">
+    tools:context=".my_races.MyRacesActivity">
 
     <fragment
         android:id="@+id/fragment_my_races_list"
-        android:name="nl.samtimo.pubcrawl.RacesListFragment"
+        android:name="nl.samtimo.pubcrawl.races.RacesListFragment"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>

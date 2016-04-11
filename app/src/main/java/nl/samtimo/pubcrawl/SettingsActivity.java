@@ -10,6 +10,8 @@ import android.widget.Button;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
+import nl.samtimo.pubcrawl.ui.ColorAppCompatActivity;
+
 public class SettingsActivity extends ColorAppCompatActivity {
     private static final String DEFAULT_BACKGROUND_COLOR = "#FFFFF2";
 

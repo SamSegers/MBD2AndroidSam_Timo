@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.samtimo.pubcrawl.PubsActivity">
+    tools:context=".pubs.PubsActivity">
 
     <fragment
         android:id="@+id/fragment_pubs_search"
-        android:name="nl.samtimo.pubcrawl.PubsListFragment"
+        android:name="nl.samtimo.pubcrawl.pubs.PubsListFragment"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>

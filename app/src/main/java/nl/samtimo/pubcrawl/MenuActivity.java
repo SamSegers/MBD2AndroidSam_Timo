@@ -8,6 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import nl.samtimo.pubcrawl.authentication.LoginActivity;
+import nl.samtimo.pubcrawl.my_races.MyRacesActivity;
+import nl.samtimo.pubcrawl.pubs.PubsActivity;
+import nl.samtimo.pubcrawl.races.RacesActivity;
+import nl.samtimo.pubcrawl.request.Request;
+import nl.samtimo.pubcrawl.request.RequestMethod;
+import nl.samtimo.pubcrawl.request.RequestTask;
+import nl.samtimo.pubcrawl.ui.ColorAppCompatActivity;
+
 public class MenuActivity extends ColorAppCompatActivity {
 
     @Override
@@ -73,7 +82,7 @@ public class MenuActivity extends ColorAppCompatActivity {
 
     private void logout(){
         Request request = new Request(RequestMethod.GET, "logout", null, null);
-        new RequestTask(this, "logout").execute(request);
+        new RequestTask(this, RequestType.SIGN_OUT.ordinal()).execute(request);
     }
 
     public void logoutFinish(){
@@ -85,5 +94,9 @@ public class MenuActivity extends ColorAppCompatActivity {
     private void openSettings(){
         Intent intent = new Intent(MenuActivity.this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    public enum RequestType{
+        SIGN_OUT
     }
 }
