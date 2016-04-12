@@ -70,7 +70,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void signUp(String result){
         if(result.equals("signed up")){
-            Intent intent = new Intent(this, MenuActivity.class);
+            //TODO static user init
+            //LoginActivity.user = new CurrentUser();
+            //Intent intent = new Intent(this, MenuActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
         //TODO populate static user
